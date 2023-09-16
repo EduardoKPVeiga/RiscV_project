@@ -1,0 +1,13 @@
+v 3
+file . "./mux8bits.vhd" "20230916182714.000" "20230916155815.349":
+  entity mux8bits at 1( 0) + 0 on 17;
+  architecture a_mux8bits of mux8bits at 16( 428) + 0 on 18;
+file . "./mux2x1.vhd" "20230916183022.000" "20230916155815.300":
+  entity mux2x1 at 1( 0) + 0 on 13;
+  architecture a_mux2x1 of mux2x1 at 13( 255) + 0 on 14;
+file . "./soma_subtrai.vhd" "20230916182726.000" "20230916155815.273":
+  entity soma_e_subtrai at 1( 0) + 0 on 11;
+  architecture a_soma_e_subtrai of soma_e_subtrai at 12( 291) + 0 on 12;
+file . "./mux4x1.vhd" "20230916182714.000" "20230916155815.329":
+  entity mux4x1 at 1( 0) + 0 on 15;
+  architecture a_mux4x1 of mux4x1 at 13( 291) + 0 on 16;
