@@ -38,7 +38,6 @@ architecture a_mux2x1_tb of mux2x1_tb is
             entr0 <= '1';
             entr1 <= '1';
             wait for 50 ns;
-            wait;
             sel <= '1';
             entr0 <= '0';
             entr1 <= '0';
