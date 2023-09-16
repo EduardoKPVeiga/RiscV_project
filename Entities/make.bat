@@ -14,6 +14,3 @@ ghdl -e soma_e_subtrai
 ghdl -e mux2x1
 ghdl -e mux4x1
 ghdl -e mux8bits
-
-cd TestBench
-./make.bat

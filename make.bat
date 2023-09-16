@@ -1,2 +1,5 @@
 cd Entities
-./make.bat
+call ./make.bat
+
+cd TestBench
+call ./make.bat
