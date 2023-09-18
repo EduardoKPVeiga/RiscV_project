@@ -1,5 +1,4 @@
-cd Entities
-call ./make.bat
+if exist work-obj93.cf del work-obj93.cf
 
-cd TestBench
-call ./make.bat
+call Entities/make.bat
+call TestBench/make.bat

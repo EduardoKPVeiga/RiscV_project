@@ -1,19 +1,4 @@
 v 3
-file . "TestBench/mux2x1_tb.vhd" "20230916182714.000" "20230916202228.525":
-  entity mux2x1_tb at 1( 0) + 0 on 117;
-  architecture a_mux2x1_tb of mux2x1_tb at 7( 76) + 0 on 118;
-file . "Entities/mux8bits.vhd" "20230916182714.000" "20230916202228.269":
-  entity mux8bits at 1( 0) + 0 on 113;
-  architecture a_mux8bits of mux8bits at 16( 428) + 0 on 114;
-file . "Entities/mux2x1.vhd" "20230916183022.000" "20230916202228.226":
-  entity mux2x1 at 1( 0) + 0 on 109;
-  architecture a_mux2x1 of mux2x1 at 13( 255) + 0 on 110;
-file . "Entities/soma_subtrai.vhd" "20230916182726.000" "20230916202228.199":
-  entity soma_e_subtrai at 1( 0) + 0 on 107;
-  architecture a_soma_e_subtrai of soma_e_subtrai at 12( 291) + 0 on 108;
-file . "Entities/mux4x1.vhd" "20230916182714.000" "20230916202228.252":
-  entity mux4x1 at 1( 0) + 0 on 111;
-  architecture a_mux4x1 of mux4x1 at 13( 291) + 0 on 112;
-file . "TestBench/soma_subtrai_tb.vhd" "20230916182726.000" "20230916202228.503":
-  entity soma_e_subtrai_tb at 1( 0) + 0 on 115;
-  architecture a_soma_e_subtrai_tb of soma_e_subtrai_tb at 8( 118) + 0 on 116;
+file . "Entities/mux16bits.vhd" "20230918221230.000" "20230918192040.381":
+  entity mux16bits at 1( 0) + 0 on 11;
+  architecture a_mux16bits of mux16bits at 13( 289) + 0 on 12;
