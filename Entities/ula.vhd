@@ -4,7 +4,7 @@ use IEEE.numeric_std.all;
 
 entity ula is
     port (
-        a,b         : in  unsigned(15 downto 0);
+        x,y         : in  unsigned(15 downto 0);
         op_code     : in  unsigned(1 downto 0);
         res         : out unsigned(15 downto 0)
     );
@@ -12,11 +12,11 @@ end entity;
 
 architecture a_ula of ula is
     
-    signal sum              : unsigned(15 downto 0) := a + b;
-    signal subt             : unsigned(15 downto 0) := a - b;
-    signal mult             : unsigned(31 downto 0) := a * b;
-    signal mult_truncate    : unsigned(15 downto 0);
-    signal res_mux          : unsigned(15 downto 0);
+    signal a              : unsigned(15 downto 0) := x + y;
+    signal b             : unsigned(15 downto 0) := x - y;
+    signal mult             : unsigned(31 downto 0) := x * y;
+    signal c    : unsigned(15 downto 0);
+    signal mux_out          : unsigned(15 downto 0);
     
     component mux16bits is
         port(
@@ -27,13 +27,15 @@ architecture a_ula of ula is
     end component;
 
 begin
-    mult_truncate <= resize(mult, 15);
+    a <= x;
+    b <= y;
+    c <= resize(mult, 15);
     uut: mux16bits port map(
         op_code => op_code,
-        a       => sum,
-        b       => subt,
-        c       => mult_truncate,
-        mux_out => res_mux
+        a       => a,
+        b       => b,
+        c       => c,
+        mux_out => mux_out
     );
-    res <= res_mux;
+    res <= mux_out;
 end architecture;
