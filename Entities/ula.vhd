@@ -12,10 +12,11 @@ end entity;
 
 architecture a_ula of ula is
     
-    signal sum      : unsigned(15 downto 0) := a + b;
-    signal subt     : unsigned(15 downto 0) := a - b;
-    signal mult     : unsigned(15 downto 0) := a * b;
-    signal res_mux  : unsigned(15 downto 0);
+    signal sum              : unsigned(15 downto 0) := a + b;
+    signal subt             : unsigned(15 downto 0) := a - b;
+    signal mult             : unsigned(31 downto 0) := a * b;
+    signal mult_truncate    : unsigned(15 downto 0);
+    signal res_mux          : unsigned(15 downto 0);
     
     component mux16bits is
         port(
@@ -26,11 +27,12 @@ architecture a_ula of ula is
     end component;
 
 begin
+    mult_truncate <= resize(mult, 15);
     uut: mux16bits port map(
         op_code => op_code,
         a       => sum,
         b       => subt,
-        c       => mult,
+        c       => mult_truncate,
         mux_out => res_mux
     );
     res <= res_mux;
