@@ -13,32 +13,32 @@ architecture a_ula_tb of ula_tb is
         );
     end component;
 
-    signal a, b, res    : unsigned(15 downto 0);
-    signal op_code      : unsigned(1 downto 0);
+    signal a_signal, b_signal, res_signal   : unsigned(15 downto 0);
+    signal op_code_signal                   : unsigned(1 downto 0);
 
 begin
     uut: ula port map(
-        a       <= a,
-        b       <= b,
-        res     <= res,
-        op_code <= op_code
+        a       => a_signal,
+        b       => b_signal,
+        res     => res_signal,
+        op_code => op_code_signal
     );
 
-    testbench_ula : process()
+    process
     begin
-        a       <= "0000000000100000";
-        b       <= "1010000001010010";
-        op_code <= '00';
+        a_signal       <= "0000000000100000";
+        b_signal       <= "1010000001010010";
+        op_code_signal <= "00";
         wait for 50 ns;
 
-        a       <= "0000000000100000";
-        b       <= "1010000001010010";
-        op_code <= '01';
+        a_signal       <= "0000000000100000";
+        b_signal       <= "1010000001010010";
+        op_code_signal <= "01";
         wait for 50 ns;
 
-        a       <= "0000000000100000";
-        b       <= "1010000001010010";
-        op_code <= '10';
+        a_signal       <= "0000000000100000";
+        b_signal       <= "1010000001010010";
+        op_code_signal <= "10";
         wait for 50 ns;
-    end process testbench_ula;
+    end process;
 end architecture;
