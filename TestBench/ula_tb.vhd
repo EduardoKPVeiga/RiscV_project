@@ -28,18 +28,15 @@ begin
     process
     begin
         x       <= "0000000000100000";
-        y       <= "1010000001010010";
+        y       <= "0000000001010010";
         op_code <= "00";
-        wait for 50 ns;
+        wait for 50 fs;
 
-        x       <= "0000000000100000";
-        y       <= "1010000001010010";
         op_code <= "01";
-        wait for 50 ns;
+        wait for 50 fs;
 
-        x       <= "0000000000100000";
-        y       <= "1010000001010010";
         op_code <= "10";
-        wait for 50 ns;
+        wait for 50 fs;
+        wait;
     end process;
 end architecture;
