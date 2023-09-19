@@ -4,9 +4,9 @@ use IEEE.numeric_std.all;
 
 entity mux16bits is
     port(
-        op_code         : in  unsigned(1 downto 0);
-        a,b,c           : in  unsigned(15 downto 0);
-        mux_out         : out unsigned(15 downto 0)
+        op_code     : in  unsigned(1 downto 0);
+        a,b,c       : in  unsigned(15 downto 0);
+        mux_out     : out unsigned(15 downto 0)
     );
 end entity;
 

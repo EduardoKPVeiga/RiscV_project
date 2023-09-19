@@ -14,8 +14,8 @@ architecture a_ula_tb of ula_tb is
         );
     end component;
 
-    signal x, y, res   : unsigned(15 downto 0);
-    signal op_code                   : unsigned(1 downto 0);
+    signal x, y, res    : unsigned(15 downto 0);
+    signal op_code      : unsigned(1 downto 0);
 
 begin
     uut: ula port map(
@@ -29,6 +29,28 @@ begin
     begin
         x       <= "0000000000100000";
         y       <= "0000000001010010";
+        op_code <= "00";
+        wait for 50 fs;
+
+        op_code <= "01";
+        wait for 50 fs;
+
+        op_code <= "10";
+        wait for 50 fs;
+
+        x       <= "0000001000001101";
+        y       <= "0000000000010110";
+        op_code <= "00";
+        wait for 50 fs;
+
+        op_code <= "01";
+        wait for 50 fs;
+
+        op_code <= "10";
+        wait for 50 fs;
+
+        x       <= "0000001000100110";
+        y       <= "0000000010010111";
         op_code <= "00";
         wait for 50 fs;
 
