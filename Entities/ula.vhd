@@ -15,7 +15,7 @@ architecture a_ula of ula is
     signal sum      : unsigned(15 downto 0) := a + b;
     signal subt     : unsigned(15 downto 0) := a - b;
     signal mult     : unsigned(15 downto 0) := a * b;
-    signal res_mux  : unsigned(15 downto 0) := a * b;
+    signal res_mux  : unsigned(15 downto 0);
     
     component mux16bits is
         port(
