@@ -17,3 +17,6 @@ begin
                 c when op_code = "10" else
                 "0000000000000000";
 end architecture;
+
+-- op_code 2 bits -> a,b,c
+-- op_code entra em cada caso, e temos x e y
