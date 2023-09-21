@@ -1,7 +1,7 @@
 v 4
-file . "TestBench/ula_tb.vhd" "b642d41d54e944889a6b7a30a1e726fb67b2b3c1" "20230921222013.606":
-  entity ula_tb at 1( 0) + 0 on 13;
-  architecture a_ula_tb of ula_tb at 8( 100) + 0 on 14;
-file . "Entities/ula.vhd" "58de2b395733074976b42f384e7f5e19c408b678" "20230921222013.505":
-  entity ula at 1( 0) + 0 on 11;
-  architecture a_ula of ula at 12( 270) + 0 on 12;
+file . ".\TestBench\reg8bits_tb.vhd" "23be4bad17e6aba351663a84423bb90efb99e324" "20230921203931.579":
+  entity reg8bits_tb at 1( 0) + 0 on 13;
+  architecture a_reg8bits_tb of reg8bits_tb at 8( 112) + 0 on 14;
+file . ".\Entities\reg8bits.vhd" "477a39bbabf1ace308ada63b60e7d78d0cba1a6e" "20230921203854.343":
+  entity reg8bits at 1( 0) + 0 on 11;
+  architecture a_reg8bits of reg8bits at 15( 342) + 0 on 12;
