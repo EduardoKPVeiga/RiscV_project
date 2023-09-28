@@ -18,16 +18,6 @@ end entity;
 
 architecture a_banco_de_regs of banco_de_regs is
 
-    component reg16bits
-        port(
-            clk         : in std_logic;
-            rst         : in std_logic;
-            wr_en       : in std_logic;
-            data_in     : in  unsigned(15 downto 0);
-            data_out    : out unsigned(15 downto 0)
-        );
-    end component;
-
     constant reg0           : unsigned(15 downto 0) := "0000000000000000";
     constant reg1           : unsigned(15 downto 0) := "0000000000000001";
     constant reg2           : unsigned(15 downto 0) := "0000000000000010";
@@ -37,7 +27,28 @@ architecture a_banco_de_regs of banco_de_regs is
     constant reg6           : unsigned(15 downto 0) := "0000000000000110";
     constant reg7           : unsigned(15 downto 0) := "0000000000000111";
     constant error_value    : unsigned(15 downto 0) := "1111111111111111";
-    constant zero           : unsigned(15 downto 0) := "0000000000000000"
+    constant zero           : unsigned(15 downto 0) := "0000000000000000";
+
+    component reg16bits
+        port(
+            clk             : in std_logic;
+            rst             : in std_logic;
+            wr_en           : in std_logic;
+            data_in         : in  unsigned(15 downto 0);
+            data_out        : out unsigned(15 downto 0)
+        );
+    end component;
+
+    component ula
+        port(
+            x, y            : in  unsigned(15 downto 0);
+            op_code         : in  unsigned(1 downto 0);
+            res             : out unsigned(15 downto 0)
+        );
+    end component;
+
+    signal x_s, y_s         : unsigned(15 downto 0);
+    signal op_code_s        : unsigned(1 downto 0);
 
     -- Single clock, reset and only write in 1 register per time
     signal clk_s, rst_s     : std_logic;    
@@ -76,79 +87,89 @@ architecture a_banco_de_regs of banco_de_regs is
     signal data_out_7_s     : unsigned(15 downto 0);
 
 begin
-    register_0 : reg16bits
+    ula_c : ula
+    port map(
+        x           => x_s,
+        y           => y_s,
+        op_code     => op_code_s,
+        res         => value
+    );
+
+    register_0_c : reg16bits
     port map(
         clk         => clk_s,
         rst         => rst_s,
         wr_en       => wr_en_0_s,
         data_in     => data_in_s,
-        data_out    => data_out_0_s,
+        data_out    => data_out_0_s
     );
 
-    register_1 : reg16bits
+    register_1_c : reg16bits
     port map(
         clk         => clk_s,
         rst         => rst_s,
         wr_en       => wr_en_1_s,
         data_in     => data_in_s,
-        data_out    => data_out_1_s,
+        data_out    => data_out_1_s
     );
 
-    register_2 : reg16bits
+    register_2_c : reg16bits
     port map(
         clk         => clk_s,
         rst         => rst_s,
         wr_en       => wr_en_2_s,
         data_in     => data_in_s,
-        data_out    => data_out_2_s,
+        data_out    => data_out_2_s
     );
 
-    register_3 : reg16bits
+    register_3_c : reg16bits
     port map(
         clk         => clk_s,
         rst         => rst_s,
         wr_en       => wr_en_3_s,
         data_in     => data_in_s,
-        data_out    => data_out_3_s,
+        data_out    => data_out_3_s
     );
 
-    register_4 : reg16bits
+    register_4_c : reg16bits
     port map(
         clk         => clk_s,
         rst         => rst_s,
         wr_en       => wr_en_4_s,
         data_in     => data_in_s,
-        data_out    => data_out_4_s,
+        data_out    => data_out_4_s
     );
 
-    register_5 : reg16bits
+    register_5_c : reg16bits
     port map(
         clk         => clk_s,
         rst         => rst_s,
         wr_en       => wr_en_5_s,
         data_in     => data_in_s,
-        data_out    => data_out_5_s,
+        data_out    => data_out_5_s
     );
 
-    register_6 : reg16bits
+    register_6_c : reg16bits
     port map(
         clk         => clk_s,
         rst         => rst_s,
         wr_en       => wr_en_6_s,
         data_in     => data_in_s,
-        data_out    => data_out_6_s,
+        data_out    => data_out_6_s
     );
 
-    register_7 : reg16bits
+    register_7_c : reg16bits
     port map(
         clk         => clk_s,
         rst         => rst_s,
         wr_en       => wr_en_7_s,
         data_in     => data_in_s,
-        data_out    => data_out_7_s,
+        data_out    => data_out_7_s
     );
 
-    read_data1_p : process(clk, rst)
+------------------------------------------------------------------------------------
+
+    read_data1_p : process(clk)
     begin
         if read_reg1 = reg0 then                    -- Case register 0
             read_data1 <= data_out_0_s;
@@ -167,11 +188,11 @@ begin
         elsif read_reg1 = reg7 then                 -- Case register 7
             read_data1 <= data_out_7_s;
         else
-            read_data1 <= error_value;
+            read_data1 <= zero;
         end if;
     end process read_data1_p;
 
-    read_data2_p : process(clk, rst)
+    read_data2_p : process(clk)
     begin
         if read_reg2 = reg0 then                    -- Case register 0
             read_data2 <= data_out_0_s;
@@ -190,8 +211,43 @@ begin
         elsif read_reg2 = reg7 then                 -- Case register 7
             read_data2 <= data_out_7_s;
         else
-            read_data2 <= error_value;
+            read_data2 <= zero;
         end if;
     end process read_data2_p;
 
+------------------------------------------------------------------------------------
+
+    write_value_in_reg_p : process(clk, write_en)
+    begin
+        data_in_s <= value;
+        if write_reg = reg0 then                    -- Case register 0
+            wr_en_0_s <= '1';
+        elsif write_reg = reg1 then                 -- Case register 1
+            wr_en_1_s <= '1';
+        elsif write_reg = reg2 then                 -- Case register 2
+            wr_en_2_s <= '1';
+        elsif write_reg = reg3 then                 -- Case register 3
+            wr_en_3_s <= '1';
+        elsif write_reg = reg4 then                 -- Case register 4
+            wr_en_4_s <= '1';
+        elsif write_reg = reg5 then                 -- Case register 5
+            wr_en_5_s <= '1';
+        elsif write_reg = reg6 then                 -- Case register 6
+            wr_en_6_s <= '1';
+        elsif write_reg = reg7 then                 -- Case register 7
+            wr_en_7_s <= '1';
+        else
+            read_data2 <= zero;
+        end if;
+    end process write_value_in_reg_p;
+
+------------------------------------------------------------------------------------
+
+    sum_p : process(clk)
+    begin
+        x_s         <= read_data1;
+        y_s         <= read_data2;
+        op_code_s   <= "00";
+    end process sum_p;
+    
 end architecture
