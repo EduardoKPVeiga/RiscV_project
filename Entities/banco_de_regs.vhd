@@ -51,39 +51,39 @@ architecture a_banco_de_regs of banco_de_regs is
     signal op_code_s        : unsigned(1 downto 0);
 
     -- Single clock, reset and only write in 1 register per time
-    signal clk_s, rst_s     : std_logic;    
+    signal clk_s, rst_s     : std_logic := '0';    
     signal data_in_s        : unsigned(15 downto 0);
 
     -- Register 0
-    signal wr_en_0_s        : std_logic;
+    signal wr_en_0_s        : std_logic := '0';
     signal data_out_0_s     : unsigned(15 downto 0);
 
     -- Register 1
-    signal wr_en_1_s        : std_logic;
+    signal wr_en_1_s        : std_logic := '0';
     signal data_out_1_s     : unsigned(15 downto 0);
 
     -- Register 2
-    signal wr_en_2_s        : std_logic;
+    signal wr_en_2_s        : std_logic := '0';
     signal data_out_2_s     : unsigned(15 downto 0);
 
     -- Register 3
-    signal wr_en_3_s        : std_logic;
+    signal wr_en_3_s        : std_logic := '0';
     signal data_out_3_s     : unsigned(15 downto 0);
 
     -- Register 4
-    signal wr_en_4_s        : std_logic;
+    signal wr_en_4_s        : std_logic := '0';
     signal data_out_4_s     : unsigned(15 downto 0);
 
     -- Register 5
-    signal wr_en_5_s        : std_logic;
+    signal wr_en_5_s        : std_logic := '0';
     signal data_out_5_s     : unsigned(15 downto 0);
 
     -- Register 6
-    signal wr_en_6_s        : std_logic;
+    signal wr_en_6_s        : std_logic := '0';
     signal data_out_6_s     : unsigned(15 downto 0);
 
     -- Register 7
-    signal wr_en_7_s        : std_logic;
+    signal wr_en_7_s        : std_logic := '0';
     signal data_out_7_s     : unsigned(15 downto 0);
 
 begin
@@ -249,5 +249,5 @@ begin
         y_s         <= read_data2;
         op_code_s   <= "00";
     end process sum_p;
-    
+
 end architecture
