@@ -11,10 +11,10 @@ entity ula is
 end entity;
 architecture a_ula of ula is
     signal mult        : unsigned(31 downto 0);
-    begin
-        mult <= x*y;
-        res <= x + y when op_code = "00" else 
-               x - y when op_code = "01" else
-               mult(15 downto 0) when op_code = "10" else
-               "0000000000000000";
-    end architecture;
+begin
+    mult    <=  x * y;
+    res     <=  x + y    when op_code = "00" else
+                x - y    when op_code = "01" else
+                mult(15 downto 0) when op_code = "10" else
+                "0000000000000000";
+end architecture;
