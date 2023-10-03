@@ -4,15 +4,15 @@ use IEEE.numeric_std.all;
 
 entity banco_de_regs is
     port(
-        read_reg1   : in unsigned(15 downto 0);
-        read_reg2   : in unsigned(15 downto 0);
-        value       : in unsigned(15 downto 0);
-        write_reg   : in unsigned(15 downto 0);
-        write_en    : in std_logic;
-        clk         : in std_logic;
-        rst         : in std_logic;
-        read_data1  : out unsigned(15 downto 0);
-        read_data2  : out unsigned(15 downto 0)
+        read_reg1           : in unsigned(15 downto 0);
+        read_reg2           : in unsigned(15 downto 0);
+        value               : in unsigned(15 downto 0);
+        write_reg           : in unsigned(15 downto 0);
+        write_en            : in std_logic;
+        clk                 : in std_logic;
+        rst                 : in std_logic;
+        read_data1          : out unsigned(15 downto 0);
+        read_data2          : out unsigned(15 downto 0)
     );
 end entity;
 
@@ -168,86 +168,39 @@ begin
     );
 
 ------------------------------------------------------------------------------------
+    read_data1  <=  data_out_0_s    when    read_reg1 = reg0    else
+                    data_out_1_s    when    read_reg1 = reg1    else
+                    data_out_2_s    when    read_reg1 = reg2    else
+                    data_out_3_s    when    read_reg1 = reg3    else
+                    data_out_4_s    when    read_reg1 = reg4    else
+                    data_out_5_s    when    read_reg1 = reg5    else
+                    data_out_6_s    when    read_reg1 = reg6    else
+                    data_out_7_s    when    read_reg1 = reg7    else
+                    zero;
 
-    read_data1_p : process(clk)
-    begin
-        if read_reg1 = reg0 then                    -- Case register 0
-            read_data1 <= data_out_0_s;
-        elsif read_reg1 = reg1 then                 -- Case register 1
-            read_data1 <= data_out_1_s;
-        elsif read_reg1 = reg2 then                 -- Case register 2
-            read_data1 <= data_out_2_s;
-        elsif read_reg1 = reg3 then                 -- Case register 3
-            read_data1 <= data_out_3_s;
-        elsif read_reg1 = reg4 then                 -- Case register 4
-            read_data1 <= data_out_4_s;
-        elsif read_reg1 = reg5 then                 -- Case register 5
-            read_data1 <= data_out_5_s;
-        elsif read_reg1 = reg6 then                 -- Case register 6
-            read_data1 <= data_out_6_s;
-        elsif read_reg1 = reg7 then                 -- Case register 7
-            read_data1 <= data_out_7_s;
-        else
-            read_data1 <= zero;
-        end if;
-    end process read_data1_p;
+    read_data2  <=  data_out_0_s    when    read_reg2 = reg0    else
+                    data_out_1_s    when    read_reg2 = reg1    else
+                    data_out_2_s    when    read_reg2 = reg2    else
+                    data_out_3_s    when    read_reg2 = reg3    else
+                    data_out_4_s    when    read_reg2 = reg4    else
+                    data_out_5_s    when    read_reg2 = reg5    else
+                    data_out_6_s    when    read_reg2 = reg6    else
+                    data_out_7_s    when    read_reg2 = reg7    else
+                    zero;
+    
+    data_in_s   <=  value;
+    
+    wr_en_0_s   <=  '1' when    write_reg = reg0 else '0';
+    wr_en_1_s   <=  '1' when    write_reg = reg1 else '0';
+    wr_en_2_s   <=  '1' when    write_reg = reg2 else '0';
+    wr_en_3_s   <=  '1' when    write_reg = reg3 else '0';
+    wr_en_4_s   <=  '1' when    write_reg = reg4 else '0';
+    wr_en_5_s   <=  '1' when    write_reg = reg5 else '0';
+    wr_en_6_s   <=  '1' when    write_reg = reg6 else '0';
+    wr_en_7_s   <=  '1' when    write_reg = reg7 else '0';
 
-    read_data2_p : process(clk)
-    begin
-        if read_reg2 = reg0 then                    -- Case register 0
-            read_data2 <= data_out_0_s;
-        elsif read_reg2 = reg1 then                 -- Case register 1
-            read_data2 <= data_out_1_s;
-        elsif read_reg2 = reg2 then                 -- Case register 2
-            read_data2 <= data_out_2_s;
-        elsif read_reg2 = reg3 then                 -- Case register 3
-            read_data2 <= data_out_3_s;
-        elsif read_reg2 = reg4 then                 -- Case register 4
-            read_data2 <= data_out_4_s;
-        elsif read_reg2 = reg5 then                 -- Case register 5
-            read_data2 <= data_out_5_s;
-        elsif read_reg2 = reg6 then                 -- Case register 6
-            read_data2 <= data_out_6_s;
-        elsif read_reg2 = reg7 then                 -- Case register 7
-            read_data2 <= data_out_7_s;
-        else
-            read_data2 <= zero;
-        end if;
-    end process read_data2_p;
-
-------------------------------------------------------------------------------------
-
-    write_value_in_reg_p : process(clk, write_en)
-    begin
-        data_in_s <= value;
-        if write_reg = reg0 then                    -- Case register 0
-            wr_en_0_s <= '1';
-        elsif write_reg = reg1 then                 -- Case register 1
-            wr_en_1_s <= '1';
-        elsif write_reg = reg2 then                 -- Case register 2
-            wr_en_2_s <= '1';
-        elsif write_reg = reg3 then                 -- Case register 3
-            wr_en_3_s <= '1';
-        elsif write_reg = reg4 then                 -- Case register 4
-            wr_en_4_s <= '1';
-        elsif write_reg = reg5 then                 -- Case register 5
-            wr_en_5_s <= '1';
-        elsif write_reg = reg6 then                 -- Case register 6
-            wr_en_6_s <= '1';
-        elsif write_reg = reg7 then                 -- Case register 7
-            wr_en_7_s <= '1';
-        else
-            read_data2 <= zero;
-        end if;
-    end process write_value_in_reg_p;
-
-------------------------------------------------------------------------------------
-
-    sum_p : process(clk)
-    begin
-        x_s         <= read_data1;
-        y_s         <= read_data2;
-        op_code_s   <= "00";
-    end process sum_p;
+    x_s         <=  read_data1;
+    y_s         <=  read_data2;
+    op_code_s   <=  "00";
 
 end architecture
