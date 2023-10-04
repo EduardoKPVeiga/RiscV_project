@@ -26,7 +26,6 @@ architecture a_banco_de_regs of banco_de_regs is
     constant reg5           : unsigned(15 downto 0) := "0000000000000101";
     constant reg6           : unsigned(15 downto 0) := "0000000000000110";
     constant reg7           : unsigned(15 downto 0) := "0000000000000111";
-    constant error_value    : unsigned(15 downto 0) := "1111111111111111";
     constant zero           : unsigned(15 downto 0) := "0000000000000000";
 
     component reg16bits
@@ -47,43 +46,47 @@ architecture a_banco_de_regs of banco_de_regs is
         );
     end component;
 
+    signal value_s          : unsigned(15 downto 0);
+    signal read_data1_s     : unsigned(15 downto 0);
+    signal read_data2_s     : unsigned(15 downto 0);
+
     signal x_s, y_s         : unsigned(15 downto 0);
     signal op_code_s        : unsigned(1 downto 0);
 
     -- Single clock, reset and only write in 1 register per time
-    signal clk_s, rst_s     : std_logic := '0';    
+    signal clk_s, rst_s     : std_logic;    
     signal data_in_s        : unsigned(15 downto 0);
 
     -- Register 0
-    signal wr_en_0_s        : std_logic := '0';
+    signal wr_en_0_s        : std_logic;
     signal data_out_0_s     : unsigned(15 downto 0);
 
     -- Register 1
-    signal wr_en_1_s        : std_logic := '0';
+    signal wr_en_1_s        : std_logic;
     signal data_out_1_s     : unsigned(15 downto 0);
 
     -- Register 2
-    signal wr_en_2_s        : std_logic := '0';
+    signal wr_en_2_s        : std_logic;
     signal data_out_2_s     : unsigned(15 downto 0);
 
     -- Register 3
-    signal wr_en_3_s        : std_logic := '0';
+    signal wr_en_3_s        : std_logic;
     signal data_out_3_s     : unsigned(15 downto 0);
 
     -- Register 4
-    signal wr_en_4_s        : std_logic := '0';
+    signal wr_en_4_s        : std_logic;
     signal data_out_4_s     : unsigned(15 downto 0);
 
     -- Register 5
-    signal wr_en_5_s        : std_logic := '0';
+    signal wr_en_5_s        : std_logic;
     signal data_out_5_s     : unsigned(15 downto 0);
 
     -- Register 6
-    signal wr_en_6_s        : std_logic := '0';
+    signal wr_en_6_s        : std_logic;
     signal data_out_6_s     : unsigned(15 downto 0);
 
     -- Register 7
-    signal wr_en_7_s        : std_logic := '0';
+    signal wr_en_7_s        : std_logic;
     signal data_out_7_s     : unsigned(15 downto 0);
 
 begin
@@ -92,7 +95,7 @@ begin
         x           => x_s,
         y           => y_s,
         op_code     => op_code_s,
-        res         => value
+        res         => value_s
     );
 
     register_0_c : reg16bits
@@ -168,28 +171,7 @@ begin
     );
 
 ------------------------------------------------------------------------------------
-    read_data1  <=  data_out_0_s    when    read_reg1 = reg0    else
-                    data_out_1_s    when    read_reg1 = reg1    else
-                    data_out_2_s    when    read_reg1 = reg2    else
-                    data_out_3_s    when    read_reg1 = reg3    else
-                    data_out_4_s    when    read_reg1 = reg4    else
-                    data_out_5_s    when    read_reg1 = reg5    else
-                    data_out_6_s    when    read_reg1 = reg6    else
-                    data_out_7_s    when    read_reg1 = reg7    else
-                    zero;
-
-    read_data2  <=  data_out_0_s    when    read_reg2 = reg0    else
-                    data_out_1_s    when    read_reg2 = reg1    else
-                    data_out_2_s    when    read_reg2 = reg2    else
-                    data_out_3_s    when    read_reg2 = reg3    else
-                    data_out_4_s    when    read_reg2 = reg4    else
-                    data_out_5_s    when    read_reg2 = reg5    else
-                    data_out_6_s    when    read_reg2 = reg6    else
-                    data_out_7_s    when    read_reg2 = reg7    else
-                    zero;
-    
-    data_in_s   <=  value;
-    
+    -- Enables
     wr_en_0_s   <=  '1' when    write_reg = reg0 else '0';
     wr_en_1_s   <=  '1' when    write_reg = reg1 else '0';
     wr_en_2_s   <=  '1' when    write_reg = reg2 else '0';
@@ -199,8 +181,35 @@ begin
     wr_en_6_s   <=  '1' when    write_reg = reg6 else '0';
     wr_en_7_s   <=  '1' when    write_reg = reg7 else '0';
 
-    x_s         <=  read_data1;
-    y_s         <=  read_data2;
+    read_data1_s    <=  data_out_0_s    when    read_reg1 = reg0    else
+                        data_out_1_s    when    read_reg1 = reg1    else
+                        data_out_2_s    when    read_reg1 = reg2    else
+                        data_out_3_s    when    read_reg1 = reg3    else
+                        data_out_4_s    when    read_reg1 = reg4    else
+                        data_out_5_s    when    read_reg1 = reg5    else
+                        data_out_6_s    when    read_reg1 = reg6    else
+                        data_out_7_s    when    read_reg1 = reg7    else
+                        zero;
+
+    read_data2_s    <=  data_out_0_s    when    read_reg2 = reg0    else
+                        data_out_1_s    when    read_reg2 = reg1    else
+                        data_out_2_s    when    read_reg2 = reg2    else
+                        data_out_3_s    when    read_reg2 = reg3    else
+                        data_out_4_s    when    read_reg2 = reg4    else
+                        data_out_5_s    when    read_reg2 = reg5    else
+                        data_out_6_s    when    read_reg2 = reg6    else
+                        data_out_7_s    when    read_reg2 = reg7    else
+                        zero;
+    
+    read_data1  <=  read_data1_s;
+    read_data2  <=  read_data2_s;
+
+    -- ULA
+    x_s         <=  read_data1_s;
+    y_s         <=  read_data2_s;
     op_code_s   <=  "00";
 
-end architecture
+    --value       <=  value_s;
+    data_in_s   <=  value_s;
+
+end architecture;

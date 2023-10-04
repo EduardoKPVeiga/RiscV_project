@@ -1,16 +1,22 @@
 v 3
-file . "TestBench/reg16bits_tb.vhd" "20230921202218.000" "20230921172223.349":
-  entity reg16bits_tb at 1( 0) + 0 on 19;
-  architecture a_reg16bits_tb of reg16bits_tb at 8( 113) + 0 on 20;
-file . "Entities/reg8bits.vhd" "20230921201542.000" "20230921172223.133":
-  entity reg8bits at 1( 0) + 0 on 15;
-  architecture a_reg8bits of reg8bits at 15( 336) + 0 on 16;
-file . "Entities/ula.vhd" "20230921222902.000" "20230921172223.072":
+file . "TestBench/banco_de_regs_tb.vhd" "20231004233628.000" "20231004203634.117":
+  entity banco_de_regs_tb at 1( 0) + 0 on 23;
+  architecture a_banco_de_regs_tb of banco_de_regs_tb at 8( 110) + 0 on 24;
+file . "TestBench/ula_tb.vhd" "20230921222902.000" "20231004203634.009":
+  entity ula_tb at 1( 0) + 0 on 19;
+  architecture a_ula_tb of ula_tb at 8( 100) + 0 on 20;
+file . "Entities/reg16bits.vhd" "20230921201550.000" "20231004203633.581":
+  entity reg16bits at 1( 0) + 0 on 15;
+  architecture a_reg16bits of reg16bits at 15( 339) + 0 on 16;
+file . "Entities/ula.vhd" "20230928222750.000" "20231004203633.498":
   entity ula at 1( 0) + 0 on 11;
   architecture a_ula of ula at 12( 270) + 0 on 12;
-file . "Entities/mux16bits.vhd" "20230921222902.000" "20230921172223.103":
+file . "Entities/mux16bits.vhd" "20230928220002.000" "20231004203633.542":
   entity mux16bits at 1( 0) + 0 on 13;
   architecture a_mux16bits of mux16bits at 13( 289) + 0 on 14;
-file . "TestBench/ula_tb.vhd" "20230921222902.000" "20230921172223.333":
-  entity ula_tb at 1( 0) + 0 on 17;
-  architecture a_ula_tb of ula_tb at 8( 100) + 0 on 18;
+file . "Entities/banco_de_regs.vhd" "20231004231732.000" "20231004203633.627":
+  entity banco_de_regs at 1( 0) + 0 on 17;
+  architecture a_banco_de_regs of banco_de_regs at 19( 611) + 0 on 18;
+file . "TestBench/reg16bits_tb.vhd" "20230921202218.000" "20231004203634.055":
+  entity reg16bits_tb at 1( 0) + 0 on 21;
+  architecture a_reg16bits_tb of reg16bits_tb at 8( 113) + 0 on 22;
