@@ -39,13 +39,7 @@ architecture a_banco_de_regs of banco_de_regs is
         );
     end component;
 
-    component ula
-        port(
-            x, y            : in  unsigned(15 downto 0);
-            op_code         : in  unsigned(1 downto 0);
-            res             : out unsigned(15 downto 0)
-        );
-    end component;
+
 
     signal ula_res_s        : unsigned(15 downto 0) := zero;
     signal value_s          : unsigned(15 downto 0);
@@ -92,14 +86,7 @@ architecture a_banco_de_regs of banco_de_regs is
     signal data_out_7_s     : unsigned(15 downto 0);
 
 begin
-    ula_c : ula
-    port map(
-        x           => x_s,
-        y           => y_s,
-        op_code     => op_code_s,
-        res         => ula_res_s
-    );
-
+  
     register_0_c : reg16bits
     port map(
         clk         => clk_s,
@@ -209,11 +196,5 @@ begin
     read_data1  <=  read_data1_s;
     read_data2  <=  read_data2_s;
 
-    -- ULA
-    x_s         <=  read_data1_s;
-    y_s         <=  read_data2_s;
-    op_code_s   <=  "00";
-
-    data_in_s   <=  ula_res_s   when    ula_res_s /= zero else    value_s;
-
+    data_in_s <= value_s;
 end architecture;
