@@ -27,6 +27,7 @@ architecture a_banco_de_regs of banco_de_regs is
     constant reg6           : unsigned(15 downto 0) := "0000000000000110";
     constant reg7           : unsigned(15 downto 0) := "0000000000000111";
     constant zero           : unsigned(15 downto 0) := "0000000000000000";
+    constant erro_value     : unsigned(15 downto 0) := "1111111111111111";
 
     component reg16bits
         port(
@@ -46,6 +47,7 @@ architecture a_banco_de_regs of banco_de_regs is
         );
     end component;
 
+    signal ula_res_s        : unsigned(15 downto 0) := zero;
     signal value_s          : unsigned(15 downto 0);
     signal read_data1_s     : unsigned(15 downto 0);
     signal read_data2_s     : unsigned(15 downto 0);
@@ -95,7 +97,7 @@ begin
         x           => x_s,
         y           => y_s,
         op_code     => op_code_s,
-        res         => value_s
+        res         => ula_res_s
     );
 
     register_0_c : reg16bits
@@ -171,6 +173,9 @@ begin
     );
 
 ------------------------------------------------------------------------------------
+    value_s     <= value;
+    clk_s       <= clk;
+
     -- Enables
     wr_en_0_s   <=  '1' when    write_reg = reg0 else '0';
     wr_en_1_s   <=  '1' when    write_reg = reg1 else '0';
@@ -209,7 +214,6 @@ begin
     y_s         <=  read_data2_s;
     op_code_s   <=  "00";
 
-    --value       <=  value_s;
-    data_in_s   <=  value_s;
+    data_in_s   <=  ula_res_s   when    ula_res_s /= zero else    value_s;
 
 end architecture;

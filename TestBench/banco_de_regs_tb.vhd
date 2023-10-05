@@ -56,37 +56,43 @@ begin
 
     process
     begin
+        clk_s       <= '0';
+        write_en_s  <= '1';
         rst_s       <= '1';
         wait for 50 fs;
+
         rst_s       <= '0';
-        clk_s       <= '0';
         wait for 50 fs;
 
         write_reg_s <= reg0;
-        value_s     <= "0000000000001100";                                              -- 12
-        write_en_s  <= '1';
+        
         clk_s       <= '1';
         wait for 50 fs;
         
         clk_s       <= '0';
+        value_s     <= "0000000000001100";                                              -- 12
         wait for 50 fs;
-
-        write_reg_s <= reg1;
-        value_s     <= "0000000111111101";                                              -- 509
+        
         clk_s       <= '1';
         wait for 50 fs;
-
+        
         clk_s       <= '0';
+        write_reg_s <= reg1;
         wait for 50 fs;
 
-        value_s     <= "0000000000000000";
+        value_s     <= "0000000111111101";                                              -- 509
+        wait for 50 fs;
+
+        clk_s       <= '1';
+        wait for 50 fs;
+        
+        clk_s       <= '0';
+        write_reg_s <= reg2;
         read_reg1_s <= reg0;
         read_reg2_s <= reg1;
-        write_reg_s <= reg2;
-        clk_s       <= '1';
         wait for 50 fs;
-
-        clk_s       <= '0';
+        
+        clk_s       <= '1';
         wait for 50 fs;
 
         wait;
