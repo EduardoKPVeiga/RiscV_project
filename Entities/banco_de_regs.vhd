@@ -196,5 +196,5 @@ begin
     read_data1  <=  read_data1_s;
     read_data2  <=  read_data2_s;
 
-    data_in_s <= value_s;
+    data_in_s   <=  value_s;
 end architecture;
