@@ -39,8 +39,6 @@ architecture a_banco_de_regs of banco_de_regs is
         );
     end component;
 
-
-
     signal ula_res_s        : unsigned(15 downto 0) := zero;
     signal value_s          : unsigned(15 downto 0);
     signal read_data1_s     : unsigned(15 downto 0);

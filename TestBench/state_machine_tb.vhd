@@ -9,13 +9,13 @@ architecture a_state_machine_tb of state_machine_tb is
     component state_machine
         port (
             clk             : in std_logic;
-            state           : out bit;
+            state           : out std_logic;
             rst             : in std_logic
         );
     end component;
 
     signal clk_s            : std_logic;
-    signal state_s          : bit := '0';
+    signal state_s          : std_logic := '0';
     signal rst_s            : std_logic;
 
     constant period_time    : time      := 100 ns;
