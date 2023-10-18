@@ -20,7 +20,7 @@ architecture a_rom_tb of rom_tb is
     signal data_s           : unsigned(15 downto 0);
 
     -- For process
-    constant period_time    : time      := 100 ns;
+    constant period_time      : time      := 100 ns;
     signal finished_s         : std_logic := '0';
 
 begin
