@@ -2,21 +2,24 @@ library IEEE;
 use IEEE.std_logic_1164.all;
 use IEEE.numeric_std.all;
 
-entity main is
+entity uni_control is
     port (
-        clk       : in std_logic;      -- Clock de sistema
-        rst       : in std_logic;      -- Sinal de reset
-        state     : out std_logic;     -- Sinal de estado da máquina de estados (0 ou 1)
-        instruction: out unsigned(15 downto 0) -- Instrução lida da ROM
+        clk       : in std_logic;     
+        rst       : in std_logic;      
+        instruction: out unsigned(15 downto 0) 
     );
 end entity;
 
-architecture a_main of main is
-    signal data_s      : unsigned(15 downto 0);
-    signal state_s     : std_logic;
-    signal address_s   : unsigned(6 downto 0) := "0000000"; -- Endereço inicial da ROM
-    signal opcode      : unsigned(3 downto 0); -- Opcode da instrução
-    signal jump_en     : std_logic; -- Sinal de controle para instrução de salto
+architecture a_uni_control of uni_control is
+    signal data_s           : unsigned(15 downto 0);
+    signal state_s          : std_logic;
+    signal address_s        : unsigned(6 downto 0) 
+    signal opcode           : unsigned(3 downto 0); 
+    signal jump_en          : std_logic; 
+    signal pc               : unsigned(15 downto 0) := "0000000000000001";
+    signal register_in_s    : unsigned(15 downto 0);
+    signal register_out_s   : unsigned(15 downto 0);
+    
 
     component state_machine
         port (
@@ -34,43 +37,60 @@ architecture a_main of main is
         );
     end component;
 
+    component pc_sum
+    port (
+        register_in  : in unsigned(15 downto 0);
+        register_out : out unsigned(15 downto 0)
+    );
+    end component;
+
 begin
-    sm_inst: state_machine
+    state_machine_c: state_machine
         port map (
             clk     => clk,
             state   => state_s,
-            rst     => reset
+            rst     => rst
         );
 
-    rom_inst: rom
+    rom_c: rom
         port map (
             clk     => clk,
             address => address_s,
             data    => data_s
         );
 
-    -- Atualiza o endereço da ROM com base no estado da máquina
+    pc_sum_c: pc_sum
+        port map (
+            register_in     => register_in_s,
+            register_out    => register_out_s
+        );
+
+        
+    
     process(clk)
     begin
+        address_s <= register_out_s;
         if rising_edge(clk) then
-            address_s <= address_s + (1 when state_s = '0' else 0); -- Incrementa no estado 0 (fetch)
+            if state_s = '0'
+                instruction <= data_s;
+            else 
+                register_in_s <= register_in_s + pc;
+                pc <= pc + "0000000000000001";
+            end if;
         end if;
-    end process;
+    -- Decodificação 
+    opcode <= instr(3 downto 0);
+    case opcode is
+        when "1111" =>
+            jump_en <= '1';
+        when others =>
+            jump_en <= '0'; 
+    end case;
 
-    -- Decodificação do opcode usando when
-    process
-    begin
-        opcode <= data_s(11 downto 8);
-        case opcode is
-            when "1111" =>
-                jump_en <= '1'; -- Instrução de salto
-            when others =>
-                jump_en <= '0'; -- Outras instruções
-        end case;
-    end process;
-
-    -- Saídas do módulo principal
-    state <= state_s;
-    instruction <= data_s;
+    if jump_en = '1' then --isso aqui vai ficar na ROM 
+        data_s <= (others => '0') & instr(15 downto 4); -- reedirecionado o data_s para o endereço passado na instrução
+        -- a logica usada foi que os 4 ultimos bits são o opcode e o resto do codigo é o endereço
+        -- completando com 0 na esquerda os 4 bits faltantes
+    end if;
 
 end architecture;
