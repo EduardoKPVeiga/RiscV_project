@@ -28,15 +28,6 @@ architecture a_top_level of top_level is
     signal a_s                  :  unsigned(15 downto 0);
     signal b_s                  :  unsigned(15 downto 0);
     signal mux_out_s            :  unsigned(15 downto 0);
-    signal adress_s             :  unsigned(6  downto 0);
-    signal data_s               :  unsigned(15 downto 0);
-    --clk da rom?
-    signal register_in_s        :  unsigned(15 downto 0);
-    signal register_out_s       :  unsigned(15 downto 0);
-
-
-
-
 
     component banco_de_regs
     port(
@@ -68,25 +59,6 @@ architecture a_top_level of top_level is
     );
     end component;
 
-    component program_counter
-    end component;
-
-    
-    component pc_sum
-    port(
-        register_in     : in  unsigned(15 downto 0);
-        register_out    : out unsigned(15 downto 0)
-    );
-    end component;
-
-    component rom
-    port(
-        clk     : in std_logic;  --n sei como conectar esse clock no atual
-        address : in unsigned(6 downto 0); --vai receber a saida do rom 
-        data    : out unsigned(15 downto 0)
-    );
-
-    end component;
     begin
     ula_c : ula
         port map (
@@ -117,17 +89,7 @@ architecture a_top_level of top_level is
         mux_out     =>  mux_out_s        
     );
 
-    rom_c : rom
-    port map(
-        address   => address_s,
-        data   => data_s
-        --clk?
-    );
-    pc_sum_c : pc_sum
-    port map(
-        register_in   => register_in_s,
-        register_out   => register_out_s
-    );
+
 
     value_top_level_s   <= value_top_level;
 
@@ -142,8 +104,7 @@ architecture a_top_level of top_level is
     y_s                 <=  read_data2_s;
     op_code_ula_s       <=  "00";
 
-    --rom < - > PC
-    adress_s <=  register_out_s
+
 end architecture;
 
     

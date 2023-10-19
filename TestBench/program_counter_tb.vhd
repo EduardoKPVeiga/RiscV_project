@@ -58,8 +58,7 @@ begin
         register_out    => register_out_s
     );
 
-    data_in_pc_s        <= register_out_s;
-    wr_en_pc_s          <= '1';
+
 
     clk_proc: process
     begin
@@ -74,6 +73,8 @@ begin
 
     pc_proc: process
     begin
+        data_in_pc_s        <= register_out_s;
+        wr_en_pc_s          <= '1';
         register_in_s   <= reg0;
         wait for period_time;
         register_in_s   <= register_out_s;
@@ -86,6 +87,7 @@ begin
         wait for period_time;
         register_in_s   <= register_out_s;
         wait for period_time;
+        finished <= '1';
         wait;
     end process pc_proc;
 

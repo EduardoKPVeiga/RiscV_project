@@ -4,26 +4,29 @@ use IEEE.numeric_std.all;
 
 entity uni_control is
     port (
-        clk       : in std_logic;     
-        rst       : in std_logic;      
-        instruction: out unsigned(15 downto 0) 
+        clk         : in std_logic;     
+        rst         : in std_logic;      
+        instruction : in unsigned(15 downto 0) 
     );
 end entity;
 
 architecture a_uni_control of uni_control is
+    signal jump_en          : std_logic; 
+    --maquina de estaos
     signal data_s           : unsigned(15 downto 0);
     signal state_s          : std_logic;
+    --rom
     signal address_s        : unsigned(6 downto 0);
     signal opcode           : unsigned(3 downto 0); 
-    signal jump_en          : std_logic; 
-    signal pc               : unsigned(15 downto 0) := "0000000000000001";
+    --pc sum
     signal register_in_s    : unsigned(15 downto 0);
     signal register_out_s   : unsigned(15 downto 0);
-    signal clk_pc_s         : std_logic; 
+    --pc counter
     signal data_in_pc_s     : unsigned(15 downto 0);   
     signal data_out_pc_s    : unsigned(15 downto 0);       
     signal wr_en_pc_s       : std_logic;  
-    signal clk_s            :std_logic := clk;  
+    --clock global
+    signal clk_s            : std_logic := clk;  
     
 
     component state_machine
@@ -86,30 +89,20 @@ begin
             data_out_pc     => data_out_pc_s, 
             wr_en_pc        => wr_en_pc_s
         );
+    register_in_s <= data_out_pc_s;
+    data_in_pc_s  <= register_out_s;
+    address_s <= register_out_s(6 downto 0); -- porque o adress tem 7 bits 
 
-    data_in_pc_s <= register_out_s;
-    process(clk)
-    begin
-        address_s <= register_out_s;
-        if rising_edge(clk) then
-            if state_s = '0' then
-                wr_en_pc_s <= '0';
-                instruction <= data_s;
-            else 
-                wr_en_pc_s <= '1';
-                --register_in_s <= register_in_s + pc;
-            end if;
-            if jump_en = '1' then 
-                data_s <= (others => '0') & instruction(15 downto 4); -- reedirecionado o data_s para o endereço passado na instrução
-                -- a logica usada foi que os 4 ultimos bits são o opcode e o resto do codigo é o endereço
-                -- completando com 0 na esquerda os 4 bits faltantes
-            end if;
-        end if;
-    end process;
-         -- Decodificação 
-        jump_en <= '1' when opcode = "1111" else
+
+    wr_en_pc_s  <= '0'      when state_s = '0' ;
+    instruction <= data_s   when state_s = '0';
+    wr_en_pc_s  <= '1'      when state_s = '1'; -- libera a soma
+    address_s   <=  instruction(15 downto 7) when jump_en = '1'; --   reedirecionado o data_s para o endereço passado na instrução
+    -- a logica usada foi que os 4 ultimos bits são o opcode e o resto do codigo é o endereço
+    -- completando com 0 na esquerda os 4 bits faltantes
+
+     -- Decodificação 
+    opcode <= instruction(3 downto 0);
+    jump_en <= '1' when opcode = "1111" else
                             '0';
-        opcode <= instruction(3 downto 0);
-    
-
 end architecture;

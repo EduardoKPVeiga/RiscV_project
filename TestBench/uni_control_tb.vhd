@@ -14,7 +14,8 @@ architecture sim of main_tb is
             instruction: out unsigned(15 downto 0)
         );
     end component;
-
+    constant period_time    : time      := 100 ns;
+    signal finished         : std_logic := '0';
     signal clk          : std_logic := '0';
     signal reset        : std_logic := '1'; -- Inicia com reset ativado
     signal state        : std_logic;
@@ -32,28 +33,22 @@ begin
     -- Processo de clock
 
 
-    -- Teste 1: Reset
-    reset <= '1';
-    wait for 10 ns;
-    reset <= '0';
-    wait for 10 ns;
-
-    -- Teste 2: Estado 0 (fetch)
-    wait for 10 ns;
-
-    -- Teste 3: Estado 1 (decode/execute)
-    wait for 10 ns;
-
-    -- Teste 4: Instrução de Salto (opcode 1111)
-    instruction <= "1111000000111010";
-    wait for 10 ns;
-    wait for 10 ns;
-
-    -- Teste 5: Outra Instrução (opcode diferente de 1111)
-    instruction <= "0000000000001100";
-    wait for 10 ns;
-    wait for 10 ns;
-
-    wait;
+    clk_proc: process
+    begin
+        while finished /= '1' loop
+            clk    <= '0';
+            wait for period_time / 2;
+            clk    <= '1';
+            wait for period_time / 2;
+        end loop;
+        wait;
+    end process clk_proc;
+    geral: process
+    begin
+        instruction <= "0000000000001111";
+        wait for period_time * 15;
+        finished <= '1';
+        wait;
+    end process;
 
 end architecture;
