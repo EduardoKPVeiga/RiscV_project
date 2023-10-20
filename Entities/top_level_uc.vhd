@@ -11,12 +11,15 @@ entity top_level_uc is
     );
 end entity;
 
-architecture a_uni_control of uni_control is
+architecture a_top_level_uc of top_level_uc is
+
+    constant zero                   : unsigned(15 downto 0) := "0000000000000000";
+    constant initial_pc_sum_result  : unsigned(15 downto 0) := "1111111111111111";
 
     --unidade de controle
     signal uc_instruction_s         : unsigned(15 downto 0);
     signal uc_next_reg_pc_s         : unsigned(15 downto 0);
-    signal uc_next_reg_pc_sum_s     : unsigned(6 downto 0);
+    signal uc_next_reg_pc_sum_s     : unsigned(15 downto 0);
     signal uc_wr_en_pc_s            : std_logic;
 
     --maquina de estados
@@ -41,10 +44,10 @@ architecture a_uni_control of uni_control is
     component uni_control
         port (    
             instruction     : in  unsigned(15 downto 0);
-            next_reg_pc_sum : in  unsigned(6 downto 0);
+            next_reg_pc_sum : in  unsigned(15 downto 0);
             next_reg_pc     : out unsigned(15 downto 0);
             wr_en_pc        : out std_logic;
-            state_mch   : in  std_logic
+            state_mch       : in  std_logic
         );
     end component;
 
@@ -85,7 +88,7 @@ begin
         port map(
             instruction     => uc_instruction_s,
             next_reg_pc     => uc_next_reg_pc_s,
-            next_reg_pc_sum => pc_sum_register_out_s(6 downto 0),
+            next_reg_pc_sum => uc_next_reg_pc_sum_s,
             wr_en_pc        => uc_wr_en_pc_s,
             state_mch       => state_s
         );
@@ -118,11 +121,14 @@ begin
             wr_en_pc    => uc_wr_en_pc_s
         );
 
-        clk_s               <=  clk_tluc;
-        rst_s               <=  rst_tluc;
+        clk_s                   <=  clk_tluc;
+        rst_s                   <=  rst_tluc;
 
-        uc_instruction_s    <=  instruction   when  top_level_uc_instruction = '1'    else
-                                rom_data_s;
+        uc_next_reg_pc_sum_s    <=  zero    when    pc_sum_register_out_s /= initial_pc_sum_result  else
+                                    pc_sum_register_out_s;
 
-        rom_address_s       <=  data_out_pc_s(6 downto 0);
+        uc_instruction_s        <=  instruction   when  top_level_uc_instruction = '1'    else
+                                    rom_data_s;
+
+        rom_address_s           <=  data_out_pc_s(6 downto 0);
 end architecture;

@@ -9,8 +9,8 @@ architecture a_top_level_uc_tb of top_level_uc_tb is
     
     component top_level_uc
         port (
-            clk                         : in std_logic;
-            rst                         : in std_logic;
+            clk_tluc                         : in std_logic;
+            rst_tluc                         : in std_logic;
             instruction                 : in  unsigned(15 downto 0);
             top_level_uc_instruction    : in  std_logic
         );
@@ -25,10 +25,10 @@ architecture a_top_level_uc_tb of top_level_uc_tb is
     signal instruction_s                : unsigned(15 downto 0);
 
 begin
-    uut: top_level_uc_tb
+    uut: top_level_uc
         port map (
-            clk                         => clk_s,
-            rst                         => rst_s,
+            clk_tluc                         => clk_s,
+            rst_tluc                         => rst_s,
             top_level_uc_instruction    => top_level_uc_instruction_s,
             instruction                 => instruction_s
         );
@@ -47,7 +47,7 @@ begin
 
     geral: process
     begin
-        instruction_s <= "0000000000001111";
+        instruction_s <= "1111000000000000";
         wait for period_time;
         top_level_uc_instruction_s <= '0';
         wait for period_time * 15;
