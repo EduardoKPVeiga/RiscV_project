@@ -12,13 +12,14 @@ https://sourceforge.net/projects/gtkwave/files/, for GtkWave
 
 https://github.com/ghdl/ghdl/releases/, for GHDL
 
+## Usage
+
+
 Use the following command to analyze and create the .ghw files
 
 ```bash
 ./make.bash
 ```
-
-## Usage
 
 To open the .ghw files with GtkWave, use the following command:
 
