@@ -27,10 +27,10 @@ architecture a_top_level_uc_tb of top_level_uc_tb is
 begin
     uut: top_level_uc
         port map (
-            clk_tluc                         => clk_s,
-            rst_tluc                         => rst_s,
-            top_level_uc_instruction    => top_level_uc_instruction_s,
-            instruction                 => instruction_s
+            clk_tluc                        => clk_s,
+            rst_tluc                        => rst_s,
+            top_level_uc_instruction        => top_level_uc_instruction_s,
+            instruction                     => instruction_s
         );
 
     -- Processo de clock
@@ -47,10 +47,11 @@ begin
 
     geral: process
     begin
+        rst_s <= '0';
         instruction_s <= "1111000000000000";
         wait for period_time;
         top_level_uc_instruction_s <= '0';
-        wait for period_time * 15;
+        wait for period_time * 22;
         finished <= '1';
         wait;
     end process;

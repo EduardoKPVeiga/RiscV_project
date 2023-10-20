@@ -5,7 +5,7 @@ use IEEE.numeric_std.all;
 entity pc_sum is
     port (
         register_in     : in  unsigned(15 downto 0);
-        register_out    : out unsigned(15 downto 0) := "1111111111111111"
+        register_out    : out unsigned(15 downto 0)
     );
 end entity;
 

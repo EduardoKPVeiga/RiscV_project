@@ -31,9 +31,11 @@ architecture a_top_level_uc of top_level_uc is
     signal opcode                   : unsigned(3 downto 0);
 
     --pc sum
+    signal pc_sum_register_in_s     : unsigned(15 downto 0);
     signal pc_sum_register_out_s    : unsigned(15 downto 0);
 
     --pc counter
+    signal data_in_pc_s             : unsigned(15 downto 0);
     signal data_out_pc_s            : unsigned(15 downto 0);
     signal wr_en_pc_s               : std_logic;
 
@@ -109,26 +111,35 @@ begin
 
     pc_sum_c: pc_sum
         port map (
-            register_in     => data_out_pc_s,
+            register_in     => pc_sum_register_in_s,
             register_out    => pc_sum_register_out_s
         );
     
     program_counter_c: program_counter
         port map (
             clk_pc      => clk_s,
-            data_in_pc  => uc_next_reg_pc_s,
+            data_in_pc  => data_in_pc_s,
             data_out_pc => data_out_pc_s,
-            wr_en_pc    => uc_wr_en_pc_s
+            wr_en_pc    => wr_en_pc_s
         );
 
         clk_s                   <=  clk_tluc;
         rst_s                   <=  rst_tluc;
 
-        uc_next_reg_pc_sum_s    <=  zero    when    pc_sum_register_out_s /= initial_pc_sum_result  else
-                                    pc_sum_register_out_s;
+        wr_en_pc_s           <=  '1' when  top_level_uc_instruction = '1'    else
+                                  uc_wr_en_pc_s;
 
-        uc_instruction_s        <=  instruction   when  top_level_uc_instruction = '1'    else
+        uc_next_reg_pc_sum_s    <=  instruction and "0000111111111111" when  top_level_uc_instruction = '1'    else
+                                    pc_sum_register_out_s;
+        
+        uc_instruction_s        <=  instruction when  top_level_uc_instruction = '1'    else
                                     rom_data_s;
+
+        pc_sum_register_in_s    <=  instruction and "0000111111111111" when  top_level_uc_instruction = '1'    else
+                                    data_out_pc_s;
+
+        data_in_pc_s            <=  instruction and "0000111111111111" when  top_level_uc_instruction = '1'    else
+                                    uc_next_reg_pc_s;
 
         rom_address_s           <=  data_out_pc_s(6 downto 0);
 end architecture;
