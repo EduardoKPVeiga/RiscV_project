@@ -4,9 +4,7 @@ This is a project of a microcontroller based on RISC-V instruction set architect
 
 ## Installation
 
-Download the project's folder in https://github.com/EduardoKPVeiga/RiscV_project
-
-Obs. You will need GHDL and GtkWave to run this project, available at:
+You will need GHDL and GtkWave to run this project, available at:
 
 https://sourceforge.net/projects/gtkwave/files/, for GtkWave
 
@@ -14,6 +12,7 @@ https://github.com/ghdl/ghdl/releases/, for GHDL
 
 ## Usage
 
+Obs. See: https://nuvem.utfpr.edu.br/index.php/s/GOV36JpJORRkixr, for more information.
 
 Use the following command to analyze and create the .ghw files
 
@@ -24,5 +23,5 @@ Use the following command to analyze and create the .ghw files
 To open the .ghw files with GtkWave, use the following command:
 
 ```bash
-gtkwave .\GHW\file_name.ghw
+gtkwave .\GHW\"file_name".ghw
 ```
