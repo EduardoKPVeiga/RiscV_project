@@ -58,8 +58,6 @@ begin
         register_out    => register_out_s
     );
 
-
-
     clk_proc: process
     begin
         while finished /= '1' loop

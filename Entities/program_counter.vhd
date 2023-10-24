@@ -13,7 +13,7 @@ end entity;
 
 architecture a_program_counter of program_counter is
     component reg16bits
-        port(
+        port (
             clk         : in std_logic;
             rst         : in std_logic;
             wr_en       : in std_logic; 
