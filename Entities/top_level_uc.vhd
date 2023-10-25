@@ -1,7 +1,7 @@
 ------------------------------------------------------------------------------- 
 --
 -- Last Version
--- Date: 23/10/2023
+-- Date: 25/10/2023
 --
 ------------------------------------------------------------------------------- 
 
@@ -13,8 +13,6 @@ entity top_level_uc is
     port (
         clk_tluc                    : in  std_logic;
         rst_tluc                    : in  std_logic;
-        instruction                 : in  unsigned(15 downto 0);
-        top_level_uc_instruction    : in  std_logic;
         instruction_from_rom        : out unsigned(15 downto 0)
     );
 end entity;
@@ -22,6 +20,7 @@ end entity;
 architecture a_top_level_uc of top_level_uc is
 
     constant zero                   : unsigned(15 downto 0) := "0000000000000000";
+    constant first_instruction      : unsigned(15 downto 0) := "1111000000000000";
     constant initial_pc_sum_result  : unsigned(15 downto 0) := "1111111111111111";
 
     --unidade de controle
@@ -134,19 +133,19 @@ begin
         clk_s                   <=  clk_tluc;
         rst_s                   <=  rst_tluc;
 
-        wr_en_pc_s              <=  '1' when  top_level_uc_instruction = '1'    else
+        wr_en_pc_s              <=  '1' when  rst_tluc = '1'    else
                                   uc_wr_en_pc_s;
 
-        uc_next_reg_pc_sum_s    <=  instruction and "0000111111111111" when  top_level_uc_instruction = '1'    else
+        uc_next_reg_pc_sum_s    <=  zero    when    rst_tluc = '1'  else
                                     pc_sum_register_out_s;
         
-        uc_instruction_s        <=  instruction when  top_level_uc_instruction = '1'    else
+        uc_instruction_s        <=  first_instruction   when    rst_tluc = '1'  else
                                     rom_data_s;
 
-        pc_sum_register_in_s    <=  instruction and "0000111111111111" when  top_level_uc_instruction = '1'    else
+        pc_sum_register_in_s    <=  zero    when    rst_tluc = '1'  else
                                     data_out_pc_s;
 
-        data_in_pc_s            <=  instruction and "0000111111111111" when  top_level_uc_instruction = '1'    else
+        data_in_pc_s            <=  zero    when    rst_tluc = '1'  else
                                     uc_next_reg_pc_s;
 
         rom_address_s           <=  data_out_pc_s(6 downto 0);
