@@ -160,6 +160,7 @@ begin
 ------------------------------------------------------------------------------------
     value_s     <= value;
     clk_s       <= clk;
+    rst_s       <= rst;
 
     -- Enables
     wr_en_0_s   <=  '1' when    write_reg = reg0 else '0';

@@ -1,3 +1,10 @@
+------------------------------------------------------------------------------- 
+--
+-- Last Version
+-- Date: 25/10/2023
+--
+------------------------------------------------------------------------------- 
+
 library IEEE;
 use IEEE.std_logic_1164.all;
 use IEEE.numeric_std.all;
@@ -18,11 +25,13 @@ architecture a_processador of processador is
     -- Used to identifie opcodes
     constant add_op_code_mask_const     : unsigned(15 downto 0) :=  "0000000111000000";
     constant addi_op_code_mask_const    : unsigned(15 downto 0) :=  "0000001001000000";
+    constant sub_op_code_mask_const     : unsigned(15 downto 0) :=  "0000000110100000";
     constant nop_mask_const             : unsigned(15 downto 0) :=  "0000000000000000";
 
     -- Op Codes
     constant add_op_code_const  : unsigned(5 downto 0)  := "001110";
     constant addi_op_code_const : unsigned(5 downto 0)  := "010010";
+    constant sub_op_code_const  : unsigned(5 downto 0)  := "001101";
     constant nop_op_code_const  : unsigned(5 downto 0)  := "000000";
 
     component top_level_uc
@@ -58,7 +67,7 @@ architecture a_processador of processador is
     signal op_code_s    : unsigned(5 downto 0);
 
     -- Top Level UC
-
+    signal instruction_from_rom_s   : unsigned(15 downto 0);
 
     -- Banco de Regs
     signal register1_bdr_s      : unsigned(15 downto 0);
@@ -80,6 +89,13 @@ architecture a_processador of processador is
 
 begin
 
+    top_level_uc_c : top_level_uc
+    port map (
+        clk_tluc                =>  clk_proc_s,
+        rst_tluc                =>  rst_proc_s,
+        instruction_from_rom    =>  instruction_from_rom_s
+    );
+
     ula_c : ula
     port map (
         x       =>  value1_ula_s,
@@ -92,8 +108,9 @@ begin
     port map (
         read_reg1   =>  register1_bdr_s,
         read_reg2   =>  register2_bdr_s,
+        value       =>  value_bdr_s,
         write_reg   =>  write_reg_bdr_s,
-        write_en    =>  write_en_bdr_s,             -- Not used
+        write_en    =>  write_en_bdr_s, -- Not used
         clk         =>  clk_proc_s,
         rst         =>  rst_proc_s,
         read_data1  =>  register1_data_bdr_s,
@@ -101,19 +118,28 @@ begin
     );
 
     -- Decode message
-    op_code_s     <=    add_op_code_const    when    (instruction_from_rom and add_op_code_mask_const) = add_op_code_mask_const   else
-                        addi_op_code_const   when    (instruction_from_rom and addi_op_code_mask_const) = addi_op_code_mask_const   else
+    op_code_s     <=    add_op_code_const   when    (instruction_from_rom_s and add_op_code_mask_const) = add_op_code_mask_const      else
+                        addi_op_code_const  when    (instruction_from_rom_s and addi_op_code_mask_const) = addi_op_code_mask_const    else
+                        sub_op_code_const   when    (instruction_from_rom_s and sub_op_code_mask_const) = sub_op_code_mask_const      else
                         nop_op_code_const;
 
-    register1_bdr_s   <=    (reg_concatenation & instruction_from_rom(15 downto 11))    when    op_code_s = add_op_code_const else
+    register1_bdr_s   <=    (reg_concatenation & instruction_from_rom_s(15 downto 11))    when    op_code_s = add_op_code_const else
+                            (reg_concatenation & instruction_from_rom_s(15 downto 11))    when    op_code_s = sub_op_code_const else
                             invalid_register;
 
-    register2_bdr_s   <=    (reg_concatenation & instruction_from_rom(4 downto 0))      when    op_code_s = add_op_code_const else
-                            (reg_concatenation & instruction_from_rom(4 downto 0))      when    op_code_s = addi_op_code_const else
+    register2_bdr_s   <=    (reg_concatenation & instruction_from_rom_s(4 downto 0))      when    op_code_s = add_op_code_const   else
+                            (reg_concatenation & instruction_from_rom_s(4 downto 0))      when    op_code_s = addi_op_code_const  else
+                            (reg_concatenation & instruction_from_rom_s(4 downto 0))      when    op_code_s = sub_op_code_const   else
                             invalid_register;
 
-    value_bdr_s <=  (value_concatenation & instruction_from_rom(15 downto 11))  when    op_code_s = addi_op_code_const  else
+    value_bdr_s <=  (value_concatenation & instruction_from_rom_s(15 downto 11))  when    op_code_s = addi_op_code_const  else
                     result_ula_s;
+
+    -- See page 416 and 419 of the datasheet
+    opcode_ula_s    <=  op_code_s(1 downto 0)   when    op_code_s = add_op_code_const   else
+                        op_code_s(1 downto 0)   when    op_code_s = addi_op_code_const   else
+                        op_code_s(1 downto 0)   when    op_code_s = sub_op_code_const   else
+                        "00";
 
     value1_ula_s    <=  register1_data_bdr_s;
     value2_ula_s    <=  register2_data_bdr_s;

@@ -9,36 +9,33 @@ library IEEE;
 use IEEE.std_logic_1164.all;
 use IEEE.numeric_std.all;
 
-entity top_level_uc_tb is
+entity processador_tb is
 end entity;
 
-architecture a_top_level_uc_tb of top_level_uc_tb is
+architecture a_processador_tb of processador_tb is
     
-    component top_level_uc
+    component processador
         port (
-            clk_tluc                : in std_logic;
-            rst_tluc                : in std_logic;
-            instruction_from_rom    : out unsigned(15 downto 0)
+            clk_proc    : in std_logic;
+            rst_proc    : in std_logic
         );
     end component;
 
     constant period_time    : time      := 100 ns;
     signal finished         : std_logic := '0';
 
-    signal clk_s                        : std_logic := '0';
-    signal rst_s                        : std_logic := '1'; -- Inicia com reset ativado
-    signal instruction_from_rom_s       : unsigned(15 downto 0);
+    signal clk_s    : std_logic := '0';
+    signal rst_s    : std_logic := '1'; -- Inicia com reset ativado
 
 begin
-    uut: top_level_uc
+    uut: processador
         port map (
-            clk_tluc                => clk_s,
-            rst_tluc                => rst_s,
-            instruction_from_rom    => instruction_from_rom_s
+            clk_proc    => clk_s,
+            rst_proc    => rst_s
         );
 
     -- Processo de clock
-    clk_proc: process
+    clk_process : process
     begin
         while finished /= '1' loop
             clk_s    <= '0';
@@ -47,7 +44,7 @@ begin
             wait for period_time / 2;
         end loop;
         wait;
-    end process clk_proc;
+    end process clk_process;
 
     global_process : process
     begin

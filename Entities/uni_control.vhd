@@ -8,7 +8,7 @@ entity uni_control is
         next_reg_pc_sum : in unsigned(15 downto 0);
         next_reg_pc     : out unsigned(15 downto 0);
         wr_en_pc        : out std_logic;
-        state_mch       : in std_logic
+        state_mch       : in unsigned(1 downto 0)
     );
 end entity;
 
@@ -19,7 +19,7 @@ architecture a_uni_control of uni_control is
 
 
 begin
-    wr_en_pc    <=  '0'  when    state_mch = '0'  else
+    wr_en_pc    <=  '0'  when    state_mch = "00"  else
                     '1';
 
     next_reg_pc <=  instruction     when jump_en_s = '1'    else

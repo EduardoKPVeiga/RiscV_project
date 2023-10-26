@@ -31,7 +31,7 @@ architecture a_top_level_uc of top_level_uc is
 
     --maquina de estados
     signal rom_data_s               : unsigned(15 downto 0);
-    signal state_s                  : std_logic;
+    signal state_s                  : unsigned(1 downto 0);
 
     --rom
     signal rom_address_s            : unsigned(6 downto 0);
@@ -56,14 +56,14 @@ architecture a_top_level_uc of top_level_uc is
             next_reg_pc_sum : in  unsigned(15 downto 0);
             next_reg_pc     : out unsigned(15 downto 0);
             wr_en_pc        : out std_logic;
-            state_mch       : in  std_logic
+            state_mch       : in  unsigned(1 downto 0)
         );
     end component;
 
     component state_machine
         port (
             clk     : in  std_logic;
-            state   : out std_logic;
+            state   : out unsigned(1 downto 0);
             rst     : in  std_logic
         );
     end component;

@@ -5,6 +5,7 @@ set romtb="rom_tb"
 set smtb="state_machine_tb"
 set pctb="program_counter_tb"
 set tluctb="top_level_uc_tb"
+set proc="processador_tb"
 set GHWPh="GHW"
 set TBenchPh="TestBench"
 
@@ -16,6 +17,7 @@ ghdl -a %TBenchPh%/%romtb%.vhd
 ghdl -a %TBenchPh%/%smtb%.vhd
 ghdl -a %TBenchPh%/%pctb%.vhd
 ghdl -a %TBenchPh%/%tluctb%.vhd
+ghdl -a %TBenchPh%/%proc%.vhd
 
 ::  Creating entities
 ghdl -e %utb%
@@ -25,6 +27,7 @@ ghdl -e %romtb%
 ghdl -e %smtb%
 ghdl -e %pctb%
 ghdl -e %tluctb%
+ghdl -e %proc%
 
 ::  Deleting old ghw files
 cd GHW
@@ -35,6 +38,7 @@ if exist %romtb%.ghw del %romtb%.ghw
 if exist %smtb%.ghw del %smtb%.ghw
 if exist %pctb%.ghw del %pctb%.ghw
 if exist %tluctb%.ghw del %tluctb%.ghw
+if exist %proc%.ghw del %proc%.ghw
 
 ::  Creating new ghw files
 cd ..
@@ -45,3 +49,4 @@ ghdl  -r  %romtb%  --wave=%GHWPh%/%romtb%.ghw
 ghdl  -r  %smtb%  --wave=%GHWPh%/%smtb%.ghw
 ghdl  -r  %pctb%  --wave=%GHWPh%/%pctb%.ghw
 ghdl  -r  %tluctb%  --wave=%GHWPh%/%tluctb%.ghw
+ghdl  -r  %proc%  --wave=%GHWPh%/%proc%.ghw
