@@ -17,19 +17,21 @@ architecture a_uni_control of uni_control is
     signal jump_en_s    : std_logic;
     signal opcode_s     : unsigned(3 downto 0);
 
-
 begin
-    wr_en_pc    <=  '0'  when    state_mch = "00"  else
+    wr_en_pc    <=  '0'  when    state_mch = "10"  else
                     '1';
 
-    next_reg_pc <=  instruction     when jump_en_s = '1'    else
-                    next_reg_pc_sum;
+    next_reg_pc <=  instruction     when    jump_en_s = '1' and state_mch = "10"    else
+                    next_reg_pc_sum when    state_mch = "10"    else
+                    "0000000000000000";
 
     -- a logica usada foi que os 4 ultimos bits são o opcode e o resto do codigo é o endereço
     -- completando com 0 na esquerda os 4 bits faltantes
 
      -- Decodificação 
-    opcode_s    <=  instruction(15 downto 12);
-    jump_en_s   <=  '1' when opcode_s = "1111"    else
+    opcode_s    <=  instruction(15 downto 12)   when    state_mch = "01"    else
+                    "0000";
+
+    jump_en_s   <=  '1' when opcode_s = "1111"  else
                     '0';
 end architecture;

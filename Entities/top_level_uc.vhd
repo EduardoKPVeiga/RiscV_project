@@ -13,7 +13,8 @@ entity top_level_uc is
     port (
         clk_tluc                    : in  std_logic;
         rst_tluc                    : in  std_logic;
-        instruction_from_rom        : out unsigned(15 downto 0)
+        instruction_from_rom        : out unsigned(15 downto 0);
+        state_tluc                  : in  unsigned(1 downto 0)
     );
 end entity;
 
@@ -30,11 +31,12 @@ architecture a_top_level_uc of top_level_uc is
     signal uc_wr_en_pc_s            : std_logic;
 
     --maquina de estados
-    signal rom_data_s               : unsigned(15 downto 0);
     signal state_s                  : unsigned(1 downto 0);
-
+    
     --rom
     signal rom_address_s            : unsigned(6 downto 0);
+    signal rom_data_s               : unsigned(15 downto 0);
+    signal last_rom_data_s          : unsigned(15 downto 0);
     signal opcode                   : unsigned(3 downto 0);
 
     --pc sum
@@ -57,14 +59,6 @@ architecture a_top_level_uc of top_level_uc is
             next_reg_pc     : out unsigned(15 downto 0);
             wr_en_pc        : out std_logic;
             state_mch       : in  unsigned(1 downto 0)
-        );
-    end component;
-
-    component state_machine
-        port (
-            clk     : in  std_logic;
-            state   : out unsigned(1 downto 0);
-            rst     : in  std_logic
         );
     end component;
 
@@ -102,13 +96,6 @@ begin
             state_mch       => state_s
         );
 
-    state_machine_c: state_machine
-        port map (
-            clk     => clk_s,
-            state   => state_s,
-            rst     => rst_s
-        );
-
     rom_c: rom
         port map (
             clk     => clk_s,
@@ -130,11 +117,14 @@ begin
             wr_en_pc    => wr_en_pc_s
         );
 
+        state_s <=  state_tluc;
+
         clk_s                   <=  clk_tluc;
         rst_s                   <=  rst_tluc;
 
         wr_en_pc_s              <=  '1' when  rst_tluc = '1'    else
-                                  uc_wr_en_pc_s;
+                                    uc_wr_en_pc_s   when    state_s = "10"  else
+                                    '0';
 
         uc_next_reg_pc_sum_s    <=  zero    when    rst_tluc = '1'  else
                                     pc_sum_register_out_s;

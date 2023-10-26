@@ -38,7 +38,8 @@ architecture a_processador of processador is
         port (
             clk_tluc                    : in  std_logic;
             rst_tluc                    : in  std_logic;
-            instruction_from_rom        : out unsigned(15 downto 0)
+            instruction_from_rom        : out unsigned(15 downto 0);
+            state_tluc                  : in  unsigned(1 downto 0)
         );
     end component;
 
@@ -63,8 +64,19 @@ architecture a_processador of processador is
             read_data2  : out unsigned(15 downto 0)
         );
     end component;
+    
+    component state_machine
+        port (
+            clk     : in  std_logic;
+            state   : out unsigned(1 downto 0);
+            rst     : in  std_logic
+        );
+    end component;
 
     signal op_code_s    : unsigned(5 downto 0);
+
+    -- State Machine
+    signal state_s  : unsigned(1 downto 0);
 
     -- Top Level UC
     signal instruction_from_rom_s   : unsigned(15 downto 0);
@@ -93,7 +105,8 @@ begin
     port map (
         clk_tluc                =>  clk_proc_s,
         rst_tluc                =>  rst_proc_s,
-        instruction_from_rom    =>  instruction_from_rom_s
+        instruction_from_rom    =>  instruction_from_rom_s,
+        state_tluc              =>  state_s
     );
 
     ula_c : ula
@@ -117,34 +130,45 @@ begin
         read_data2  =>  register2_data_bdr_s
     );
 
+    state_machine_c : state_machine
+    port map (
+        clk     =>  clk_proc_s,
+        state   =>  state_s,
+        rst     =>  rst_proc_s
+    );
+
     -- Decode message
-    op_code_s     <=    add_op_code_const   when    (instruction_from_rom_s and add_op_code_mask_const) = add_op_code_mask_const      else
-                        addi_op_code_const  when    (instruction_from_rom_s and addi_op_code_mask_const) = addi_op_code_mask_const    else
-                        sub_op_code_const   when    (instruction_from_rom_s and sub_op_code_mask_const) = sub_op_code_mask_const      else
+    op_code_s     <=    add_op_code_const   when    ((instruction_from_rom_s and add_op_code_mask_const) = add_op_code_mask_const)      and state_s = "01"  else
+                        addi_op_code_const  when    ((instruction_from_rom_s and addi_op_code_mask_const) = addi_op_code_mask_const)    and state_s = "01"  else
+                        sub_op_code_const   when    ((instruction_from_rom_s and sub_op_code_mask_const) = sub_op_code_mask_const)      and state_s = "01"  else
                         nop_op_code_const;
 
-    register1_bdr_s   <=    (reg_concatenation & instruction_from_rom_s(15 downto 11))    when    op_code_s = add_op_code_const else
-                            (reg_concatenation & instruction_from_rom_s(15 downto 11))    when    op_code_s = sub_op_code_const else
+    register1_bdr_s   <=    (reg_concatenation & instruction_from_rom_s(15 downto 11))    when    (op_code_s = add_op_code_const) and (state_s = "01")  else
+                            (reg_concatenation & instruction_from_rom_s(15 downto 11))    when    (op_code_s = sub_op_code_const) and (state_s = "01")  else
                             invalid_register;
 
-    register2_bdr_s   <=    (reg_concatenation & instruction_from_rom_s(4 downto 0))      when    op_code_s = add_op_code_const   else
-                            (reg_concatenation & instruction_from_rom_s(4 downto 0))      when    op_code_s = addi_op_code_const  else
-                            (reg_concatenation & instruction_from_rom_s(4 downto 0))      when    op_code_s = sub_op_code_const   else
+    register2_bdr_s   <=    (reg_concatenation & instruction_from_rom_s(4 downto 0))      when    (op_code_s = add_op_code_const)   and (state_s = "01")  else
+                            (reg_concatenation & instruction_from_rom_s(4 downto 0))      when    (op_code_s = addi_op_code_const)  and (state_s = "01")  else
+                            (reg_concatenation & instruction_from_rom_s(4 downto 0))      when    (op_code_s = sub_op_code_const)   and (state_s = "01")  else
                             invalid_register;
-
-    value_bdr_s <=  (value_concatenation & instruction_from_rom_s(15 downto 11))  when    op_code_s = addi_op_code_const  else
+                            
+    value_bdr_s <=  (value_concatenation & instruction_from_rom_s(15 downto 11))  when    (op_code_s = addi_op_code_const)  and (state_s = "10")  else
                     result_ula_s;
 
     -- See page 416 and 419 of the datasheet
-    opcode_ula_s    <=  op_code_s(1 downto 0)   when    op_code_s = add_op_code_const   else
-                        op_code_s(1 downto 0)   when    op_code_s = addi_op_code_const   else
-                        op_code_s(1 downto 0)   when    op_code_s = sub_op_code_const   else
+    opcode_ula_s    <=  op_code_s(1 downto 0)   when    (op_code_s = add_op_code_const)   and (state_s = "01")  else
+                        op_code_s(1 downto 0)   when    (op_code_s = addi_op_code_const)  and (state_s = "01")  else
+                        op_code_s(1 downto 0)   when    (op_code_s = sub_op_code_const)   and (state_s = "01")  else
                         "00";
 
-    value1_ula_s    <=  register1_data_bdr_s;
-    value2_ula_s    <=  register2_data_bdr_s;
+    value1_ula_s    <=  register1_data_bdr_s    when    state_s = "10"  else
+                        invalid_register;
 
-    write_reg_bdr_s <=  register2_bdr_s;
+    value2_ula_s    <=  register2_data_bdr_s    when    state_s = "10"  else
+                        invalid_register;
+
+    write_reg_bdr_s <=  register2_bdr_s when    state_s = "01"  else
+                        invalid_register;
 
     clk_proc_s  <= clk_proc;
     rst_proc_s  <= rst_proc;

@@ -44,9 +44,6 @@ architecture a_banco_de_regs of banco_de_regs is
     signal read_data1_s     : unsigned(15 downto 0);
     signal read_data2_s     : unsigned(15 downto 0);
 
-    signal x_s, y_s         : unsigned(15 downto 0);
-    signal op_code_s        : unsigned(1 downto 0);
-
     -- Single clock, reset and only write in 1 register per time
     signal clk_s, rst_s     : std_logic;    
     signal data_in_s        : unsigned(15 downto 0);

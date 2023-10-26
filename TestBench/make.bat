@@ -16,7 +16,7 @@ ghdl -a %TBenchPh%/%brtb%.vhd
 ghdl -a %TBenchPh%/%romtb%.vhd
 ghdl -a %TBenchPh%/%smtb%.vhd
 ghdl -a %TBenchPh%/%pctb%.vhd
-ghdl -a %TBenchPh%/%tluctb%.vhd
+::ghdl -a %TBenchPh%/%tluctb%.vhd
 ghdl -a %TBenchPh%/%proc%.vhd
 
 ::  Creating entities
@@ -26,7 +26,7 @@ ghdl -e %brtb%
 ghdl -e %romtb%
 ghdl -e %smtb%
 ghdl -e %pctb%
-ghdl -e %tluctb%
+::ghdl -e %tluctb%
 ghdl -e %proc%
 
 ::  Deleting old ghw files
@@ -37,7 +37,7 @@ if exist %brtb%.ghw del %brtb%.ghw
 if exist %romtb%.ghw del %romtb%.ghw
 if exist %smtb%.ghw del %smtb%.ghw
 if exist %pctb%.ghw del %pctb%.ghw
-if exist %tluctb%.ghw del %tluctb%.ghw
+::if exist %tluctb%.ghw del %tluctb%.ghw
 if exist %proc%.ghw del %proc%.ghw
 
 ::  Creating new ghw files
@@ -48,5 +48,5 @@ ghdl  -r  %brtb%  --wave=%GHWPh%/%brtb%.ghw
 ghdl  -r  %romtb%  --wave=%GHWPh%/%romtb%.ghw
 ghdl  -r  %smtb%  --wave=%GHWPh%/%smtb%.ghw
 ghdl  -r  %pctb%  --wave=%GHWPh%/%pctb%.ghw
-ghdl  -r  %tluctb%  --wave=%GHWPh%/%tluctb%.ghw
+::ghdl  -r  %tluctb%  --wave=%GHWPh%/%tluctb%.ghw
 ghdl  -r  %proc%  --wave=%GHWPh%/%proc%.ghw
