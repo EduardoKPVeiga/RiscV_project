@@ -23,10 +23,10 @@ architecture a_processador of processador is
     constant invalid_register       : unsigned(15 downto 0) := "1111111111111111";
 
     -- Used to identifie opcodes
-    constant add_op_code_mask_const     : unsigned(15 downto 0) :=  "0000000111000000";
-    constant addi_op_code_mask_const    : unsigned(15 downto 0) :=  "0000001001000000";
-    constant sub_op_code_mask_const     : unsigned(15 downto 0) :=  "0000000110100000";
-    constant nop_mask_const             : unsigned(15 downto 0) :=  "0000000000000000";
+    constant add_op_code_mask_const     : unsigned(15 downto 0) :=  B"00000_001110_00000";
+    constant addi_op_code_mask_const    : unsigned(15 downto 0) :=  B"00000_010010_00000";
+    constant sub_op_code_mask_const     : unsigned(15 downto 0) :=  B"00000_001101_00000";
+    constant nop_mask_const             : unsigned(15 downto 0) :=  B"00000_000000_00000";
 
     -- Op Codes
     constant add_op_code_const  : unsigned(5 downto 0)  := "001110";
@@ -138,21 +138,21 @@ begin
     );
 
     -- Decode message
-    op_code_s     <=    add_op_code_const   when    ((instruction_from_rom_s and add_op_code_mask_const) = add_op_code_mask_const)      and state_s = "01"  else
-                        addi_op_code_const  when    ((instruction_from_rom_s and addi_op_code_mask_const) = addi_op_code_mask_const)    and state_s = "01"  else
-                        sub_op_code_const   when    ((instruction_from_rom_s and sub_op_code_mask_const) = sub_op_code_mask_const)      and state_s = "01"  else
+    op_code_s     <=    add_op_code_const   when    ((instruction_from_rom_s(10 downto 5) = add_op_code_const))      and state_s = "01"  else
+                        addi_op_code_const  when    ((instruction_from_rom_s(10 downto 5) = addi_op_code_const))    and state_s = "01"  else
+                        sub_op_code_const   when    ((instruction_from_rom_s(10 downto 5) = sub_op_code_const))      and state_s = "01"  else
                         nop_op_code_const;
 
-    register1_bdr_s   <=    (reg_concatenation & instruction_from_rom_s(15 downto 11))    when    (op_code_s = add_op_code_const) and (state_s = "01")  else
-                            (reg_concatenation & instruction_from_rom_s(15 downto 11))    when    (op_code_s = sub_op_code_const) and (state_s = "01")  else
+    register1_bdr_s   <=    (reg_concatenation & instruction_from_rom_s(4 downto 0))    when    (op_code_s = add_op_code_const) and (state_s = "01")  else
+                            (reg_concatenation & instruction_from_rom_s(4 downto 0))    when    (op_code_s = sub_op_code_const) and (state_s = "01")  else
                             invalid_register;
 
-    register2_bdr_s   <=    (reg_concatenation & instruction_from_rom_s(4 downto 0))      when    (op_code_s = add_op_code_const)   and (state_s = "01")  else
-                            (reg_concatenation & instruction_from_rom_s(4 downto 0))      when    (op_code_s = addi_op_code_const)  and (state_s = "01")  else
-                            (reg_concatenation & instruction_from_rom_s(4 downto 0))      when    (op_code_s = sub_op_code_const)   and (state_s = "01")  else
+    register2_bdr_s   <=    (reg_concatenation & instruction_from_rom_s(15 downto 11))      when    (op_code_s = add_op_code_const)   and (state_s = "01")  else
+                            (reg_concatenation & instruction_from_rom_s(15 downto 11))      when    (op_code_s = addi_op_code_const)  and (state_s = "01")  else
+                            (reg_concatenation & instruction_from_rom_s(15 downto 11))      when    (op_code_s = sub_op_code_const)   and (state_s = "01")  else
                             invalid_register;
                             
-    value_bdr_s <=  (value_concatenation & instruction_from_rom_s(15 downto 11))  when    (op_code_s = addi_op_code_const)  and (state_s = "10")  else
+    value_bdr_s <=  (value_concatenation & instruction_from_rom_s(4 downto 0))  when    (op_code_s = addi_op_code_const)    else
                     result_ula_s;
 
     -- See page 416 and 419 of the datasheet
@@ -161,11 +161,9 @@ begin
                         op_code_s(1 downto 0)   when    (op_code_s = sub_op_code_const)   and (state_s = "01")  else
                         "00";
 
-    value1_ula_s    <=  register1_data_bdr_s    when    state_s = "10"  else
-                        invalid_register;
+    value1_ula_s    <=  register2_data_bdr_s;
 
-    value2_ula_s    <=  register2_data_bdr_s    when    state_s = "10"  else
-                        invalid_register;
+    value2_ula_s    <=  register1_data_bdr_s;
 
     write_reg_bdr_s <=  register2_bdr_s when    state_s = "01"  else
                         invalid_register;

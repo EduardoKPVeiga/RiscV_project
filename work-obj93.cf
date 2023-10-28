@@ -1,58 +1,58 @@
 v 3
-file . "TestBench/processador_tb.vhd" "20231026005656.000" "20231026155635.750":
+file . "TestBench/processador_tb.vhd" "20231026005656.000" "20231026173015.340":
   entity processador_tb at 8( 212) + 0 on 47;
   architecture a_processador_tb of processador_tb at 15( 327) + 0 on 48;
-file . "TestBench/state_machine_tb.vhd" "20231026004104.000" "20231026155635.628":
+file . "TestBench/state_machine_tb.vhd" "20231026004104.000" "20231026173015.289":
   entity state_machine_tb at 8( 212) + 0 on 43;
   architecture a_state_machine_tb of state_machine_tb at 15( 329) + 0 on 44;
-file . "TestBench/banco_de_regs_tb.vhd" "20231026004104.000" "20231026155635.509":
+file . "TestBench/banco_de_regs_tb.vhd" "20231026004104.000" "20231026173015.219":
   entity banco_de_regs_tb at 7( 207) + 0 on 39;
   architecture a_banco_de_regs_tb of banco_de_regs_tb at 14( 317) + 0 on 40;
-file . "TestBench/ula_tb.vhd" "20231019021928.000" "20231026155635.384":
+file . "TestBench/ula_tb.vhd" "20231019021928.000" "20231026173015.169":
   entity ula_tb at 1( 0) + 0 on 35;
   architecture a_ula_tb of ula_tb at 8( 100) + 0 on 36;
-file . "Entities/top_level_uc.vhd" "20231026185628.000" "20231026155634.087":
+file . "Entities/top_level_uc.vhd" "20231026201838.000" "20231026173014.325":
   entity top_level_uc at 8( 212) + 0 on 31;
   architecture a_top_level_uc of top_level_uc at 21( 583) + 0 on 32;
-file . "Entities/pc_sum.vhd" "20231020232258.000" "20231026155633.907":
+file . "Entities/pc_sum.vhd" "20231020232258.000" "20231026173014.274":
   entity pc_sum at 1( 0) + 0 on 27;
   architecture a_pc_sum of pc_sum at 12( 234) + 0 on 28;
-file . "Entities/state_machine.vhd" "20231026004104.000" "20231026155633.772":
+file . "Entities/state_machine.vhd" "20231026004104.000" "20231026173014.205":
   entity state_machine at 8( 212) + 0 on 23;
   architecture a_state_machine of state_machine at 20( 456) + 0 on 24;
-file . "Entities/top_level.vhd" "20231020232258.000" "20231026155633.643":
+file . "Entities/top_level.vhd" "20231020232258.000" "20231026173014.157":
   entity top_level at 1( 0) + 0 on 19;
   architecture a_top_level of top_level at 12( 249) + 0 on 20;
-file . "Entities/reg16bits.vhd" "20231005190200.000" "20231026155633.500":
+file . "Entities/reg16bits.vhd" "20231005190200.000" "20231026173014.102":
   entity reg16bits at 1( 0) + 0 on 15;
   architecture a_reg16bits of reg16bits at 15( 339) + 0 on 16;
-file . "Entities/ula.vhd" "20231026004104.000" "20231026155633.358":
+file . "Entities/ula.vhd" "20231026004104.000" "20231026173014.041":
   entity ula at 1( 0) + 0 on 11;
   architecture a_ula of ula at 12( 270) + 0 on 12;
-file . "Entities/mux16bits.vhd" "20231017001836.000" "20231026155633.439":
+file . "Entities/mux16bits.vhd" "20231017001836.000" "20231026173014.070":
   entity mux16bits at 1( 0) + 0 on 13;
   architecture a_mux16bits of mux16bits at 13( 287) + 0 on 14;
-file . "Entities/banco_de_regs.vhd" "20231026004352.000" "20231026155633.564":
+file . "Entities/banco_de_regs.vhd" "20231026004352.000" "20231026173014.120":
   entity banco_de_regs at 1( 0) + 0 on 17;
   architecture a_banco_de_regs of banco_de_regs at 19( 611) + 0 on 18;
-file . "Entities/rom.vhd" "20231026004104.000" "20231026155633.709":
+file . "Entities/rom.vhd" "20231026004104.000" "20231026173014.191":
   entity rom at 1( 0) + 0 on 21;
   architecture a_rom of rom at 13( 246) + 0 on 22;
-file . "Entities/program_counter.vhd" "20231026004104.000" "20231026155633.855":
+file . "Entities/program_counter.vhd" "20231026004104.000" "20231026173014.240":
   entity program_counter at 1( 0) + 0 on 25;
   architecture a_program_counter of program_counter at 14( 325) + 0 on 26;
-file . "Entities/uni_control.vhd" "20231026012828.000" "20231026155633.992":
+file . "Entities/uni_control.vhd" "20231026193806.000" "20231026173014.305":
   entity uni_control at 1( 0) + 0 on 29;
   architecture a_uni_control of uni_control at 15( 390) + 0 on 30;
-file . "Entities/processador.vhd" "20231026014822.000" "20231026155634.157":
+file . "Entities/processador.vhd" "20231026203010.000" "20231026173014.367":
   entity processador at 8( 212) + 0 on 33;
   architecture a_processador of processador at 19( 417) + 0 on 34;
-file . "TestBench/reg16bits_tb.vhd" "20231005190200.000" "20231026155635.446":
+file . "TestBench/reg16bits_tb.vhd" "20231005190200.000" "20231026173015.186":
   entity reg16bits_tb at 1( 0) + 0 on 37;
   architecture a_reg16bits_tb of reg16bits_tb at 8( 113) + 0 on 38;
-file . "TestBench/rom_tb.vhd" "20231020232258.000" "20231026155635.573":
+file . "TestBench/rom_tb.vhd" "20231020232258.000" "20231026173015.259":
   entity rom_tb at 1( 0) + 0 on 41;
   architecture a_rom_tb of rom_tb at 8( 107) + 0 on 42;
-file . "TestBench/program_counter_tb.vhd" "20231026004104.000" "20231026155635.695":
+file . "TestBench/program_counter_tb.vhd" "20231026004104.000" "20231026173015.319":
   entity program_counter_tb at 1( 0) + 0 on 45;
   architecture a_program_counter_tb of program_counter_tb at 8( 119) + 0 on 46;

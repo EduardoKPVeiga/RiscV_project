@@ -18,8 +18,8 @@ architecture a_uni_control of uni_control is
     signal opcode_s     : unsigned(3 downto 0);
 
 begin
-    wr_en_pc    <=  '0'  when    state_mch = "10"  else
-                    '1';
+    wr_en_pc    <=  '1'  when    state_mch = "10"  else
+                    '0';
 
     next_reg_pc <=  instruction     when    jump_en_s = '1' and state_mch = "10"    else
                     next_reg_pc_sum when    state_mch = "10"    else
