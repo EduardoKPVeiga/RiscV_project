@@ -16,17 +16,9 @@ architecture a_rom of rom is
 
     constant conteudo_rom : mem := (
         -- caso endereco => conteudo
-        0   => "0000001001000001", -- addi R0,zero,1
-        1   => "0000101001011111", -- addi R1,zero,31
-        2   => "0000000110100001", -- sub  R0,R0,R1
-        3   => "0001101001010000", -- addi R2,zero,16
-        4   => "0001100111000000", -- add  R2,R2,R0
-        5   => "0000000000000000", -- nop
-        6   => "0000000000000000", -- nop
-        7   => "0000000000000000", -- nop
-        8   => "0000000000000000", -- nop
-        9   => "0000000000000000", -- nop
-        10  => "0000000001100001", -- jmp  R0
+        0   => "0000001001000000", -- addi R0,zero,1
+        1   => "0000101001000001", -- addi R1,zero,31
+        2   => "0000000101110000", -- bch
         -- abaixo: casos omissos => (zero em todos os bits)
         others => (others => '0')
     );

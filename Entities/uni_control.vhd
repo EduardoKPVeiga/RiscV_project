@@ -5,10 +5,10 @@ use IEEE.numeric_std.all;
 entity uni_control is
     port (    
         instruction     : in  unsigned(15 downto 0);
-        next_reg_pc_sum : in unsigned(15 downto 0);
+        next_reg_pc_sum : in  unsigned(15 downto 0);
         next_reg_pc     : out unsigned(15 downto 0);
         wr_en_pc        : out std_logic;
-        state_mch       : in unsigned(1 downto 0)
+        state_mch       : in  unsigned(1 downto 0)
     );
 end entity;
 
@@ -24,9 +24,6 @@ begin
     next_reg_pc <=  "00000000000" & instruction(4 downto 0)     when    jump_en_s = '1' and state_mch = "10"    else
                     next_reg_pc_sum when    state_mch = "10"    else
                     "0000000000000000";
-
-    -- a logica usada foi que os 4 ultimos bits são o opcode e o resto do codigo é o endereço
-    -- completando com 0 na esquerda os 4 bits faltantes
 
      -- Decodificação 
     opcode_s    <=  instruction(10 downto 5);

@@ -14,8 +14,8 @@ entity top_level_uc is
         clk_tluc                    : in  std_logic;
         rst_tluc                    : in  std_logic;
         instruction_from_rom        : out unsigned(15 downto 0);
-        state_tluc                  : in  unsigned(1 downto 0)
-        --tp_next_reg_pc              : in unsigned(15 downto 0);
+        state_tluc                  : in  unsigned(1 downto 0);
+        tp_next_reg_pc_sum          : in  unsigned(15 downto 0)
     );
 end entity;
 
@@ -119,7 +119,6 @@ begin
         );
 
         state_s <=  state_tluc;
-        --uc_next_reg_pc_s <= tp_next_reg_pc;
         clk_s                   <=  clk_tluc;
         rst_s                   <=  rst_tluc;
 
@@ -128,6 +127,7 @@ begin
                                     '0';
 
         uc_next_reg_pc_sum_s    <=  zero    when    rst_tluc = '1'  else
+                                    tp_next_reg_pc_sum when tp_next_reg_pc_sum /= "1111111111111111" else
                                     pc_sum_register_out_s;
         
         uc_instruction_s        <=  first_instruction   when    rst_tluc = '1'  else
@@ -138,8 +138,6 @@ begin
 
         data_in_pc_s            <=  zero    when    rst_tluc = '1'  else
                                     uc_next_reg_pc_s;
-
-        --uc_next_reg_pc_s <
 
         rom_address_s           <=  data_out_pc_s(6 downto 0);
 

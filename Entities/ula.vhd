@@ -19,8 +19,7 @@ begin
     soma_17 <= x_17 +  y_17;
     carry <= soma_17(16) when op_code = "10" else
              '0' when (op_code = "01") and (x >=y ) else
-             '1'  when (op_code = "01") else
-             '0';
+             '1'  when (op_code = "01");
     mult    <=  x * y;
     res     <=  soma_17(15 downto 0)    when op_code = "10" else
                 x - y                   when op_code = "01" else
