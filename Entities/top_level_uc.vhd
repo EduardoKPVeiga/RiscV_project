@@ -126,14 +126,14 @@ begin
                                     uc_wr_en_pc_s   when    state_s = "10"  else
                                     '0';
 
-        uc_next_reg_pc_sum_s    <=  zero    when    rst_tluc = '1'  else
-                                    tp_next_reg_pc_sum when tp_next_reg_pc_sum /= "1111111111111111" else
+        uc_next_reg_pc_sum_s    <=  zero                                      when    rst_tluc = '1'  else
+                                    pc_sum_register_out_s+ tp_next_reg_pc_sum when tp_next_reg_pc_sum /= "1111111111111111" else
                                     pc_sum_register_out_s;
         
         uc_instruction_s        <=  first_instruction   when    rst_tluc = '1'  else
                                     rom_data_s;
 
-        pc_sum_register_in_s    <=  zero    when    rst_tluc = '1'  else
+        pc_sum_register_in_s    <=  zero                               when    rst_tluc = '1'  else
                                     data_out_pc_s;
 
         data_in_pc_s            <=  zero    when    rst_tluc = '1'  else

@@ -175,7 +175,7 @@ begin
     value1_ula_s    <=  register2_data_bdr_s;
 
     value2_ula_s    <=  register1_data_bdr_s;
-    tp_next_reg_pc_sum_s <= "000000000000" & instruction_from_rom_s(3 downto 0) when (op_code_s = bch_op_code_const) and (carry_ula_s = '1') else
+    tp_next_reg_pc_sum_s <= "000000000000" & instruction_from_rom_s(3 downto 0) when (op_code_s = bch_op_code_const) and (carry_ula_s = '1') and (state_s = "10") else
                           "1111111111111111";
     write_reg_bdr_s <=  register2_bdr_s when    state_s = "01"  else
                         invalid_register;

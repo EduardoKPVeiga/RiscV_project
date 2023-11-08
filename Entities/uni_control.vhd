@@ -22,9 +22,9 @@ begin
                     '0';
 
     next_reg_pc <=  "00000000000" & instruction(4 downto 0)     when    jump_en_s = '1' and state_mch = "10"    else
-                    next_reg_pc_sum when    state_mch = "10"    else
+                    next_reg_pc_sum                             when    state_mch = "10"    else
                     "0000000000000000";
-
+                    
      -- Decodificação 
     opcode_s    <=  instruction(10 downto 5);
 

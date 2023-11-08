@@ -18,7 +18,11 @@ architecture a_rom of rom is
         -- caso endereco => conteudo
         0   => "0000001001000000", -- addi R0,zero,1
         1   => "0000101001000001", -- addi R1,zero,31
-        2   => "0000000101110000", -- bch
+        2   => "0000000101110001", -- bch
+        3   => "0001101001000001", -- addi R2,zero,1
+        4   => "0001101001000011", -- addi R2,zero,5
+
+
         -- abaixo: casos omissos => (zero em todos os bits)
         others => (others => '0')
     );
