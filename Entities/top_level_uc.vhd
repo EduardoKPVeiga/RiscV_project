@@ -127,9 +127,11 @@ begin
                                     '0';
 
         uc_next_reg_pc_sum_s    <=  zero                                      when    rst_tluc = '1'  else
-                                    pc_sum_register_out_s+ tp_next_reg_pc_sum when tp_next_reg_pc_sum /= "1111111111111111" else
+                                    tp_next_reg_pc_sum                        when (uc_instruction_s(10 downto 5) = "000011") and (tp_next_reg_pc_sum /= "1111111111111111") else
+                                    pc_sum_register_out_s+ tp_next_reg_pc_sum when (uc_instruction_s(10 downto 5) = "001011") and (tp_next_reg_pc_sum /= "1111111111111111") else
                                     pc_sum_register_out_s;
         
+
         uc_instruction_s        <=  first_instruction   when    rst_tluc = '1'  else
                                     rom_data_s;
 

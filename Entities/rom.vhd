@@ -21,6 +21,8 @@ architecture a_rom of rom is
         2   => "0000000101110001", -- bch
         3   => "0001101001000001", -- addi R2,zero,1
         4   => "0001101001000011", -- addi R2,zero,5
+        5   => "0000000001100001", -- jmp 1
+
 
 
         -- abaixo: casos omissos => (zero em todos os bits)

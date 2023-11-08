@@ -33,6 +33,7 @@ architecture a_processador of processador is
     constant addi_op_code_const : unsigned(5 downto 0)  := "010010";
     constant sub_op_code_const  : unsigned(5 downto 0)  := "001101";
     constant bch_op_code_const  : unsigned(5 downto 0)  := "001011";
+    constant jmp_op_code_const  : unsigned(5 downto 0)  := "000011";
     constant nop_op_code_const  : unsigned(5 downto 0)  := "000000";
 
     component top_level_uc
@@ -149,7 +150,9 @@ begin
     op_code_s     <=    add_op_code_const   when    ((instruction_from_rom_s(10 downto 5) = add_op_code_const))             and state_s = "01"  else
                         addi_op_code_const  when    ((instruction_from_rom_s(10 downto 5) = addi_op_code_const))            and state_s = "01"  else
                         sub_op_code_const   when    ((instruction_from_rom_s(10 downto 5) = sub_op_code_const))             and state_s = "01"  else
-                        bch_op_code_const   when    ((instruction_from_rom_s(10 downto 5) = bch_op_code_const))             and state_s = "01";
+                        bch_op_code_const   when    ((instruction_from_rom_s(10 downto 5) = bch_op_code_const))             and state_s = "01"  else
+                        jmp_op_code_const   when    ((instruction_from_rom_s(10 downto 5) = jmp_op_code_const))             and state_s = "01";
+
                         
     register1_bdr_s   <=    (reg_concatenation & instruction_from_rom_s(4 downto 0))    when    (op_code_s = add_op_code_const) and (state_s = "01")  else
                             (reg_concatenation & instruction_from_rom_s(4 downto 0))    when    (op_code_s = sub_op_code_const) and (state_s = "01")  else
@@ -176,7 +179,8 @@ begin
 
     value2_ula_s    <=  register1_data_bdr_s;
     tp_next_reg_pc_sum_s <= "000000000000" & instruction_from_rom_s(3 downto 0) when (op_code_s = bch_op_code_const) and (carry_ula_s = '1') and (state_s = "10") else
-                          "1111111111111111";
+                            "00000000000"  & instruction_from_rom_s(4 downto 0) when (op_code_s = jmp_op_code_const) and (state_s = "10") else
+                            "1111111111111111";
     write_reg_bdr_s <=  register2_bdr_s when    state_s = "01"  else
                         invalid_register;
 
