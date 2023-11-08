@@ -10,12 +10,15 @@ architecture a_ula_tb of ula_tb is
         port(
             x,y         : in  unsigned(15 downto 0);
             op_code     : in  unsigned(1 downto 0);
-            res         : out unsigned(15 downto 0)
+            res         : out unsigned(15 downto 0);
+            carry       : out std_logic
         );
     end component;
 
     signal x, y, res                 : unsigned(15 downto 0);
     signal op_code                   : unsigned(1 downto 0);
+    signal carry_s                   : std_logic;
+
 
 begin
     uut : ula
@@ -23,7 +26,8 @@ begin
         x       => x,
         y       => y,
         res     => res,
-        op_code => op_code
+        op_code => op_code,
+        carry   => carry_s
     );
 
     process

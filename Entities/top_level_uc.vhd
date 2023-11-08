@@ -15,6 +15,7 @@ entity top_level_uc is
         rst_tluc                    : in  std_logic;
         instruction_from_rom        : out unsigned(15 downto 0);
         state_tluc                  : in  unsigned(1 downto 0)
+        --tp_next_reg_pc              : in unsigned(15 downto 0);
     );
 end entity;
 
@@ -118,7 +119,7 @@ begin
         );
 
         state_s <=  state_tluc;
-
+        --uc_next_reg_pc_s <= tp_next_reg_pc;
         clk_s                   <=  clk_tluc;
         rst_s                   <=  rst_tluc;
 
@@ -137,6 +138,8 @@ begin
 
         data_in_pc_s            <=  zero    when    rst_tluc = '1'  else
                                     uc_next_reg_pc_s;
+
+        --uc_next_reg_pc_s <
 
         rom_address_s           <=  data_out_pc_s(6 downto 0);
 

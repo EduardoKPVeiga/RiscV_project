@@ -24,6 +24,7 @@ architecture a_top_level of top_level is
     signal y_s                  :  unsigned(15 downto 0);
     signal op_code_ula_s        :  unsigned(1  downto 0);
     signal ula_res_s            :  unsigned(15 downto 0);
+    signal ula_cary_s           :  std_logic;
     signal op_code_mux_s        :  unsigned(1  downto 0);
     signal a_s                  :  unsigned(15 downto 0);
     signal b_s                  :  unsigned(15 downto 0);
@@ -47,7 +48,8 @@ architecture a_top_level of top_level is
     port (
         x,y                     : in  unsigned(15 downto 0);
         op_code                 : in  unsigned(1 downto 0);
-        res                     : out unsigned(15 downto 0)
+        res                     : out unsigned(15 downto 0);
+        carry                   : out std_logic
     );
     end component;
 
@@ -65,7 +67,8 @@ architecture a_top_level of top_level is
             x       => x_s,
             y       => y_s,
             op_code => op_code_ula_s,
-            res     => ula_res_s
+            res     => ula_res_s,
+            carry   => ula_cary_s
         );
 
     banco_de_regs_c : banco_de_regs

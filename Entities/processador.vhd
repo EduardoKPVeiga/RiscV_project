@@ -47,7 +47,8 @@ architecture a_processador of processador is
         port (
             x,y     : in  unsigned(15 downto 0);
             op_code : in  unsigned(1 downto 0);
-            res     : out unsigned(15 downto 0)
+            res     : out unsigned(15 downto 0);
+            carry   : out std_logic
         );
     end component;
 
@@ -98,6 +99,8 @@ architecture a_processador of processador is
     signal value2_ula_s : unsigned(15 downto 0);
     signal result_ula_s : unsigned(15 downto 0);
     signal opcode_ula_s : unsigned(1 downto 0);
+    signal  carry_ula_s : std_logic;
+
 
 begin
 
@@ -114,7 +117,8 @@ begin
         x       =>  value1_ula_s,
         y       =>  value2_ula_s,
         res     =>  result_ula_s,
-        op_code =>  opcode_ula_s
+        op_code =>  opcode_ula_s,
+        carry   =>  carry_ula_s
     );
 
     banco_de_regs_c : banco_de_regs
