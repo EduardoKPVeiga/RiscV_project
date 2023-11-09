@@ -172,6 +172,7 @@ begin
                             invalid_register;
                             
     value_bdr_s <=  (value_concatenation & instruction_from_rom_s(4 downto 0))  when    (op_code_s = addi_op_code_const)    else
+                    (register2_data_bdr_s)                                      when    (op_code_s = bch_op_code_const)    else
                     result_ula_s;
 
     -- See page 416 and 419 of the datasheet
