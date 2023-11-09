@@ -105,6 +105,9 @@ architecture a_processador of processador is
     signal opcode_ula_s : unsigned(1 downto 0);
     signal  carry_ula_s : std_logic;
 
+    -- Signal branch
+    signal branch_s     : unsigned(15 downto 0);
+
 
 begin
 
@@ -178,9 +181,18 @@ begin
     value1_ula_s    <=  register2_data_bdr_s;
 
     value2_ula_s    <=  register1_data_bdr_s;
-    tp_next_reg_pc_sum_s <= "000000000000" & instruction_from_rom_s(3 downto 0) when (op_code_s = bch_op_code_const) and (carry_ula_s = '1') and (state_s = "10") else
+
+
+    branch_s <= "000000000000" & (not (instruction_from_rom_s(3 downto 0) - "0001")) when (instruction_from_rom_s(3) = '1') and (op_code_s = bch_op_code_const) else
+                "000000000000" & instruction_from_rom_s(3 downto 0) when op_code_s = bch_op_code_const else
+                "0000000000000000" ;
+
+
+    tp_next_reg_pc_sum_s <=  branch_s                                           when (op_code_s = bch_op_code_const) and (carry_ula_s = '1') and (state_s = "10") else
                             "00000000000"  & instruction_from_rom_s(4 downto 0) when (op_code_s = jmp_op_code_const) and (state_s = "10") else
                             "1111111111111111";
+-- +1
+                       
     write_reg_bdr_s <=  register2_bdr_s when    state_s = "01"  else
                         invalid_register;
 
