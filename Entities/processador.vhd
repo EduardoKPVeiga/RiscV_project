@@ -34,7 +34,8 @@ architecture a_processador of processador is
     constant sub_op_code_const  : unsigned(5 downto 0)  := "001101";
     constant bch_op_code_const  : unsigned(5 downto 0)  := "001011";
     constant jmp_op_code_const  : unsigned(5 downto 0)  := "000011";
-    constant nop_op_code_const  : unsigned(5 downto 0)  := "000000";
+    constant mov_op_code_const  : unsigned(5 downto 0)  := "000000";
+    -- constant nop_op_code_const  : unsigned(5 downto 0)  := "000000";
 
     component top_level_uc
         port (
@@ -154,10 +155,12 @@ begin
                         addi_op_code_const  when    ((instruction_from_rom_s(10 downto 5) = addi_op_code_const))            and state_s = "01"  else
                         sub_op_code_const   when    ((instruction_from_rom_s(10 downto 5) = sub_op_code_const))             and state_s = "01"  else
                         bch_op_code_const   when    ((instruction_from_rom_s(10 downto 5) = bch_op_code_const))             and state_s = "01"  else
+                        mov_op_code_const   when    ((instruction_from_rom_s(10 downto 5) = mov_op_code_const))             and state_s = "01"  else
                         jmp_op_code_const   when    ((instruction_from_rom_s(10 downto 5) = jmp_op_code_const))             and state_s = "01";
 
                         
     register1_bdr_s   <=    (reg_concatenation & instruction_from_rom_s(4 downto 0))    when    (op_code_s = add_op_code_const) and (state_s = "01")  else
+                            (reg_concatenation & instruction_from_rom_s(4 downto 0))    when    (op_code_s = mov_op_code_const) and (state_s = "01")  else
                             (reg_concatenation & instruction_from_rom_s(4 downto 0))    when    (op_code_s = sub_op_code_const) and (state_s = "01")  else
                             ("0000000000000"   & instruction_from_rom_s(12 downto 11) & instruction_from_rom_s(4) )    when    (op_code_s = bch_op_code_const) and (state_s = "01")  else
                             invalid_register;
@@ -175,8 +178,7 @@ begin
     opcode_ula_s    <=  op_code_s(1 downto 0)   when    (op_code_s = add_op_code_const)   and (state_s = "01")  else
                         op_code_s(1 downto 0)   when    (op_code_s = addi_op_code_const)  and (state_s = "01")  else
                         op_code_s(1 downto 0)   when    (op_code_s = sub_op_code_const)   and (state_s = "01")  else
-                        "01"                    when    (op_code_s = bch_op_code_const)   and (state_s = "01")  else
-                        "00";
+                        "01"                    when    (op_code_s = bch_op_code_const)   and (state_s = "01");
 
     value1_ula_s    <=  register2_data_bdr_s;
 
