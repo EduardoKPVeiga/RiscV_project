@@ -22,7 +22,7 @@ architecture a_rom of rom is
         3   => "0001100111000000", -- add  R3,R3,R0
         4   => "0011001001011110", -- addi R6,zero,30 
         5   => "0100100101111110", -- bch R3 < R2(30)  -2     0110100101101110   0100100101111110
-        6   => "0010100111000100", -- add R5,R5,R4
+        6   => "0010100111000100", -- add R5,R5,R4 a
         -- abaixo: casos omissos => (zero em todos os bits)
         others => (others => '0')
     );

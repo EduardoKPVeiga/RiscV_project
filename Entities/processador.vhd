@@ -178,7 +178,8 @@ begin
     opcode_ula_s    <=  op_code_s(1 downto 0)   when    (op_code_s = add_op_code_const)   and (state_s = "01")  else
                         op_code_s(1 downto 0)   when    (op_code_s = addi_op_code_const)  and (state_s = "01")  else
                         op_code_s(1 downto 0)   when    (op_code_s = sub_op_code_const)   and (state_s = "01")  else
-                        "01"                    when    (op_code_s = bch_op_code_const)   and (state_s = "01");
+                        "01"                    when    (op_code_s = bch_op_code_const)   and (state_s = "01")  else
+                        "00";
 
     value1_ula_s    <=  register2_data_bdr_s;
 
