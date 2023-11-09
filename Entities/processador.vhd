@@ -32,9 +32,10 @@ architecture a_processador of processador is
     constant add_op_code_const  : unsigned(5 downto 0)  := "001110";
     constant addi_op_code_const : unsigned(5 downto 0)  := "010010";
     constant sub_op_code_const  : unsigned(5 downto 0)  := "001101";
-    constant bch_op_code_const  : unsigned(5 downto 0)  := "001011";
+    constant bch_op_code_const  : unsigned(5 downto 0)  := "101100";
     constant jmp_op_code_const  : unsigned(5 downto 0)  := "000011";
-    constant mov_op_code_const  : unsigned(5 downto 0)  := "000000";
+    constant cmp_op_code_const  : unsigned(5 downto 0)  := "000111";
+    -- constant mov_op_code_const  : unsigned(5 downto 0)  := "000000";
     -- constant nop_op_code_const  : unsigned(5 downto 0)  := "000000";
 
     component top_level_uc
@@ -109,6 +110,9 @@ architecture a_processador of processador is
     -- Signal branch
     signal branch_s     : unsigned(15 downto 0);
 
+    --cmp
+    signal flag_cmp     : std_logic;
+
 
 begin
 
@@ -154,45 +158,49 @@ begin
     op_code_s     <=    add_op_code_const   when    ((instruction_from_rom_s(10 downto 5) = add_op_code_const))             and state_s = "01"  else
                         addi_op_code_const  when    ((instruction_from_rom_s(10 downto 5) = addi_op_code_const))            and state_s = "01"  else
                         sub_op_code_const   when    ((instruction_from_rom_s(10 downto 5) = sub_op_code_const))             and state_s = "01"  else
-                        bch_op_code_const   when    ((instruction_from_rom_s(10 downto 5) = bch_op_code_const))             and state_s = "01"  else
-                        mov_op_code_const   when    ((instruction_from_rom_s(10 downto 5) = mov_op_code_const))             and state_s = "01"  else
+                        bch_op_code_const   when    (((instruction_from_rom_s(10 downto 7) & "00") = bch_op_code_const))             and state_s = "01"  else
+                        cmp_op_code_const   when    ((instruction_from_rom_s(10 downto 5) = cmp_op_code_const))             and state_s = "01"  else
                         jmp_op_code_const   when    ((instruction_from_rom_s(10 downto 5) = jmp_op_code_const))             and state_s = "01";
 
                         
     register1_bdr_s   <=    (reg_concatenation & instruction_from_rom_s(4 downto 0))    when    (op_code_s = add_op_code_const) and (state_s = "01")  else
-                            (reg_concatenation & instruction_from_rom_s(4 downto 0))    when    (op_code_s = mov_op_code_const) and (state_s = "01")  else
+                            (reg_concatenation & instruction_from_rom_s(4 downto 0))    when    (op_code_s = cmp_op_code_const) and (state_s = "01")  else
                             (reg_concatenation & instruction_from_rom_s(4 downto 0))    when    (op_code_s = sub_op_code_const) and (state_s = "01")  else
                             ("0000000000000"   & instruction_from_rom_s(12 downto 11) & instruction_from_rom_s(4) )    when    (op_code_s = bch_op_code_const) and (state_s = "01")  else
                             invalid_register;
 
     register2_bdr_s   <=    (reg_concatenation & instruction_from_rom_s(15 downto 11))      when    (op_code_s = add_op_code_const)   and (state_s = "01")  else
                             (reg_concatenation & instruction_from_rom_s(15 downto 11))      when    (op_code_s = addi_op_code_const)  and (state_s = "01")  else
+                            (reg_concatenation & instruction_from_rom_s(15 downto 11))      when    (op_code_s = cmp_op_code_const)  and (state_s = "01")  else
                             (reg_concatenation & instruction_from_rom_s(15 downto 11))      when    (op_code_s = sub_op_code_const)   and (state_s = "01")  else
                             ("0000000000000"   & instruction_from_rom_s(15 downto 13))      when    (op_code_s = bch_op_code_const)   and (state_s = "01")  else
                             invalid_register;
                             
     value_bdr_s <=  (value_concatenation & instruction_from_rom_s(4 downto 0))  when    (op_code_s = addi_op_code_const)    else
-                    (register2_data_bdr_s)                                      when    (op_code_s = bch_op_code_const)    else
-                    result_ula_s;
+                    (register2_data_bdr_s)                                      when    (op_code_s = cmp_op_code_const)    else
+                    result_ula_s; --pode dar erro cmp, por pegar o register errado, caso: apenas coloque register2_ para 1
+    
+    flag_cmp <= '1' when (op_code_s = cmp_op_code_const)   and (result_ula_s = "0000000000000000") else
+                '1' when (op_code_s = cmp_op_code_const)   and (result_ula_s(15) = '1')            else
+                '0' when (op_code_s = cmp_op_code_const);
 
     -- See page 416 and 419 of the datasheet
     opcode_ula_s    <=  op_code_s(1 downto 0)   when    (op_code_s = add_op_code_const)   and (state_s = "01")  else
                         op_code_s(1 downto 0)   when    (op_code_s = addi_op_code_const)  and (state_s = "01")  else
                         op_code_s(1 downto 0)   when    (op_code_s = sub_op_code_const)   and (state_s = "01")  else
-                        "01"                    when    (op_code_s = bch_op_code_const)   and (state_s = "01")  else
+                        "01"                    when    (op_code_s = cmp_op_code_const)   and (state_s = "01")  else
                         "00";
 
     value1_ula_s    <=  register2_data_bdr_s;
-
     value2_ula_s    <=  register1_data_bdr_s;
 
+    branch_s <= ("11111111" & (instruction_from_rom_s(15 downto 11) & instruction_from_rom_s(6 downto 4))) when  (instruction_from_rom_s(15) = '1') and (op_code_s = bch_op_code_const) else
+                ("00000000" & (instruction_from_rom_s(15 downto 11) & instruction_from_rom_s(6 downto 4))) when  (op_code_s = bch_op_code_const) else
+                "0000000000000000";
+    -- trocar para apenas soma no top level e apenas complementar tudo com "1" caso seja signed caso contrario com "1"
 
-    branch_s <= "000000000000" & (not (instruction_from_rom_s(3 downto 0) - "0001")) when (instruction_from_rom_s(3) = '1') and (op_code_s = bch_op_code_const) else
-                "000000000000" & instruction_from_rom_s(3 downto 0) when op_code_s = bch_op_code_const else
-                "0000000000000000" ;
-
-
-    tp_next_reg_pc_sum_s <=  branch_s                                           when (op_code_s = bch_op_code_const) and (carry_ula_s = '1') and (state_s = "10") else
+                                                                                                                         --mudar para cmp_flag                                       
+    tp_next_reg_pc_sum_s <=  branch_s                                           when (op_code_s = bch_op_code_const) and (flag_cmp = '1') and (state_s = "10") else
                             "00000000000"  & instruction_from_rom_s(4 downto 0) when (op_code_s = jmp_op_code_const) and (state_s = "10") else
                             "1111111111111111";
 -- +1
