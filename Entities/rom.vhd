@@ -22,7 +22,7 @@ architecture a_rom of rom is
         2   => "0010000111000011", -- add R4,R4,R3
         3   => "0001100111000000", -- add R3,R3,R0
         4   => "0001100011100110", -- cmp R3 < R6    0001100011100110  , vou tentar inverter os registradores 0011000011100011
-        5   => "1111110111011010", -- bne -3  101100
+        5   => "1111110111001010", -- bne -3  
         6   => "0010100111000100", -- add R5,R5,R4 a
         -- abaixo: casos omissos => (zero em todos os bits)
         others => (others => '0')

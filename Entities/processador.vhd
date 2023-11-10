@@ -180,9 +180,11 @@ begin
                     (register2_data_bdr_s)                                      when    (op_code_s = cmp_op_code_const)    else
                     result_ula_s; --pode dar erro cmp, por pegar o register errado, caso: apenas coloque register2_ para 1
     
-    flag_cmp <= '1' when (op_code_s = cmp_op_code_const)   and (result_ula_s = "0000000000000000") else
-                '1' when (op_code_s = cmp_op_code_const)   and (result_ula_s(15) = '1')            else
-                '0' when (op_code_s = cmp_op_code_const);
+    flag_cmp <= '0' when (op_code_s = cmp_op_code_const)   and (result_ula_s = "0000000000000000")  and (state_s = "01") else
+                '1' when (op_code_s = cmp_op_code_const)   and (result_ula_s(15) = '1')             and (state_s = "01")          else
+                '0' when (op_code_s = cmp_op_code_const)   and (state_s = "01");
+    --constant cmp_op_code_const  : unsigned(5 downto 0)  := "000111";
+
 
     -- See page 416 and 419 of the datasheet
     opcode_ula_s    <=  op_code_s(1 downto 0)   when    (op_code_s = add_op_code_const)   and (state_s = "01")  else
@@ -202,7 +204,7 @@ begin
                                                                                                                          --mudar para cmp_flag                                       
     tp_next_reg_pc_sum_s <=  branch_s                                           when (op_code_s = bch_op_code_const) and (flag_cmp = '1') and (state_s = "10") else
                             "00000000000"  & instruction_from_rom_s(4 downto 0) when (op_code_s = jmp_op_code_const) and (state_s = "10") else
-                            "1111111111111111";
+                            "0000000000000000";
 -- +1
                        
     write_reg_bdr_s <=  register2_bdr_s when    state_s = "01"  else

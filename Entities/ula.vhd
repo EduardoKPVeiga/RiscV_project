@@ -23,6 +23,5 @@ begin
     mult    <=  x * y;
     res     <=  soma_17(15 downto 0)    when op_code = "10" else
                 x - y                   when op_code = "01" else
-                mult(15 downto 0)       when op_code = "11" else
-                "0000000000000000";
+                mult(15 downto 0)       when op_code = "11";
 end architecture;

@@ -130,9 +130,9 @@ begin
                                     uc_wr_en_pc_s   when    state_s = "10"  else
                                     '0';
         branch_sum <= ("0" & pc_sum_register_out_s) + ("0" & tp_next_reg_pc_sum) when (uc_instruction_s(10 downto 7) = "1011");
-        uc_next_reg_pc_sum_s    <=  zero                                        when    rst_tluc = '1'  else
-                                    tp_next_reg_pc_sum                          when (uc_instruction_s(10 downto 5) = "000011") else
-                                    branch_sum(15 downto 0)  when (uc_instruction_s(10 downto 7) = "1011") else
+        uc_next_reg_pc_sum_s    <=  zero                                         when    rst_tluc = '1'  else
+                                    tp_next_reg_pc_sum                           when (uc_instruction_s(10 downto 5) = "000011") else
+                                    branch_sum(15 downto 0)                      when (uc_instruction_s(10 downto 7) = "1011") else
                                     pc_sum_register_out_s;
         
 
