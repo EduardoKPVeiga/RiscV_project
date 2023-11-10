@@ -156,12 +156,12 @@ begin
 
     -- Decode message
     op_code_s     <=    add_op_code_const   when    ((instruction_from_rom_s(10 downto 5) = add_op_code_const))             and state_s = "01"  else
+                        cmp_op_code_const   when    ((instruction_from_rom_s(10 downto 5) = cmp_op_code_const))             and state_s = "01"  else
                         addi_op_code_const  when    ((instruction_from_rom_s(10 downto 5) = addi_op_code_const))            and state_s = "01"  else
                         sub_op_code_const   when    ((instruction_from_rom_s(10 downto 5) = sub_op_code_const))             and state_s = "01"  else
-                        bch_op_code_const   when    (((instruction_from_rom_s(10 downto 7) & "00") = bch_op_code_const))             and state_s = "01"  else
-                        cmp_op_code_const   when    ((instruction_from_rom_s(10 downto 5) = cmp_op_code_const))             and state_s = "01"  else
+                        bch_op_code_const   when    (((instruction_from_rom_s(10 downto 7) & "00") = bch_op_code_const))    and state_s = "01"  else
                         jmp_op_code_const   when    ((instruction_from_rom_s(10 downto 5) = jmp_op_code_const))             and state_s = "01";
-
+                       --constant cmp_op_code_const  : unsigned(5 downto 0)  := "000111";
                         
     register1_bdr_s   <=    (reg_concatenation & instruction_from_rom_s(4 downto 0))    when    (op_code_s = add_op_code_const) and (state_s = "01")  else
                             (reg_concatenation & instruction_from_rom_s(4 downto 0))    when    (op_code_s = cmp_op_code_const) and (state_s = "01")  else

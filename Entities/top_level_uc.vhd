@@ -53,6 +53,10 @@ architecture a_top_level_uc of top_level_uc is
     signal clk_s                    : std_logic;
     signal rst_s                    : std_logic;
 
+
+    --signal
+    signal branch_sum               : unsigned(16 downto 0);
+
     component uni_control
         port (    
             instruction     : in  unsigned(15 downto 0);
@@ -125,10 +129,10 @@ begin
         wr_en_pc_s              <=  '1' when  rst_tluc = '1'    else
                                     uc_wr_en_pc_s   when    state_s = "10"  else
                                     '0';
-
-        uc_next_reg_pc_sum_s    <=  zero                                       when    rst_tluc = '1'  else
-                                    tp_next_reg_pc_sum                         when (uc_instruction_s(10 downto 5) = "000011") and (tp_next_reg_pc_sum /= "1111111111111111") else
-                                    pc_sum_register_out_s + tp_next_reg_pc_sum  when (uc_instruction_s(10 downto 5) = "001011") and (tp_next_reg_pc_sum /= "1111111111111111") else
+        branch_sum <= ("0" & pc_sum_register_out_s) + ("0" & tp_next_reg_pc_sum) when (uc_instruction_s(10 downto 7) = "1011");
+        uc_next_reg_pc_sum_s    <=  zero                                        when    rst_tluc = '1'  else
+                                    tp_next_reg_pc_sum                          when (uc_instruction_s(10 downto 5) = "000011") else
+                                    branch_sum(15 downto 0)  when (uc_instruction_s(10 downto 7) = "1011") else
                                     pc_sum_register_out_s;
         
 
