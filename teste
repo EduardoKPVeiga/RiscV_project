@@ -1,0 +1,7 @@
+STH     R1,R2
+rrrrr   111011  RRRRR
+Store-memory (adr, GR [reg2], Halfword)
+
+LDH     R1,R2
+rrrrr   111001  RRRRR
+GR [reg2] ← sign-extend (Load-memory(adr, Halfword))
