@@ -1,3 +1,10 @@
+------------------------------------------------------------------------------- 
+--
+-- Last Version
+-- Date: 13/11/2023
+--
+------------------------------------------------------------------------------- 
+
 library IEEE;
 use IEEE.std_logic_1164.all;
 use IEEE.numeric_std.all;
@@ -17,24 +24,24 @@ architecture a_rom of rom is
     constant conteudo_rom : mem := (
         -- caso endereco => conteudo //nossos registradores são iniciados com zero
         
-        0   => "0000001001000001", -- addi R0,zero,1
-        1   => "0011001001011110", -- addi R6,zero,30 
-        2   => "0010000111000011", -- add R4,R4,R3
-        3   => "0001100111000000", -- add R3,R3,R0
-        4   => "0001100011100110", -- cmp R3 < R6    0001100011100110  , vou tentar inverter os registradores 0011000011100011
-        5   => "1111110111001010", -- bne -3  
-        6   => "0010100111000100", -- add R5,R5,R4 a
+        0   => B"00000_010010_11111", -- addi R0,zero,31
+        1   => B"00000_111011_00100", -- sth R0,R4
+        2   => B"00001_010010_11111", -- addi R1,zero,31
+        3   => B"00010_111001_00100", -- ldh R0,R4
+        4   => B"00011_010010_11111", -- addi R3,zero,31
+
+
+
+        --salva no end da ram 4 pq é o r4 31 pq é o valor de r0 
         -- abaixo: casos omissos => (zero em todos os bits)
         others => (others => '0')
     );
-   begin
 
+begin
     process(clk)
     begin
         if(rising_edge(clk)) then
             data <= conteudo_rom(to_integer(address));
         end if;
     end process;
-    
-
-   end architecture;
+end architecture;

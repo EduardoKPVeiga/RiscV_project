@@ -13,6 +13,7 @@ ghdl -a %EntPh%/pc_sum.vhd
 ghdl -a %EntPh%/uni_control.vhd
 ghdl -a %EntPh%/top_level_uc.vhd
 ghdl -a %EntPh%/processador.vhd
+ghdl -a %EntPh%/ram.vhd
 
 ::  Creating entities
 ghdl -e ula
@@ -27,3 +28,4 @@ ghdl -e pc_sum
 ghdl -e uni_control
 ghdl -e top_level_uc
 ghdl -e processador
+ghdl -e ram
