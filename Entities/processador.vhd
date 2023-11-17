@@ -200,6 +200,7 @@ begin
     value_bdr_s <=  (value_concatenation & instruction_from_rom_s(4 downto 0))  when    (op_code_s = addi_op_code_const)    else
                     register2_data_bdr_s    when    op_code_s = bch_op_code_const   else
                     data_out_ram_s          when    op_code_s = ldh_op_code_const   else
+                    register2_data_bdr_s    when    op_code_s = sth_op_code_const   else
                     result_ula_s;
 
     -- See page 416 and 419 of the datasheet
@@ -230,9 +231,8 @@ begin
     -- RAM
     wr_en_ram_s <=  '1' when    op_code_s = sth_op_code_const   else
                     '0';
-    address_ram_s   <=  register2_data_bdr_s    when    op_code_s = sth_op_code_const   or  op_code_s = ldh_op_code_const   else
-                        invalid_register;
-    data_in_ram_s   <=  register1_data_bdr_s;
+    address_ram_s   <= "00" & instruction_from_rom_s(4 downto 0)    when   ( op_code_s = sth_op_code_const   or  op_code_s = ldh_op_code_const) and (state_s = "01");
+    data_in_ram_s   <=  register2_data_bdr_s   when  ( op_code_s = sth_op_code_const   or  op_code_s = ldh_op_code_const) and (register2_data_bdr_s /= "0000000000000000" ); -- mudar aqui 
 
     clk_proc_s      <=  clk_proc;
     rst_proc_s      <=  rst_proc;

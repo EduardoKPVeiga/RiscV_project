@@ -24,13 +24,15 @@ architecture a_rom of rom is
     constant conteudo_rom : mem := (
         -- caso endereco => conteudo //nossos registradores são iniciados com zero
         
-        1   => B"00000_010010_11111", -- addi R0,zero,31
-        2   => B"00001_010010_11011", -- addi R1,zero,27
-        3   => B"00010_010010_00111", -- addi R2,zero,7
-        4   => B"00011_010010_00011", -- addi R3,zero,3
-        5   => B"00100_010010_00100", -- addi R4,zero,4
-        6   => B"00101_010010_10111", -- addi R5,zero,23
-        7   => B"00000_111011_00100", -- sth R0,R4
+        0   => B"00000_010010_11111", -- addi R0,zero,31
+        1   => B"00000_111011_00100", -- sth R0,R4
+        2   => B"00001_010010_11111", -- addi R1,zero,31
+        3   => B"00010_111001_00100", -- ldh R0,R4
+        4   => B"00011_010010_11111", -- addi R3,zero,31
+
+
+
+        --salva no end da ram 4 pq é o r4 31 pq é o valor de r0 
         -- abaixo: casos omissos => (zero em todos os bits)
         others => (others => '0')
     );
