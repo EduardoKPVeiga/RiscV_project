@@ -24,11 +24,12 @@ architecture a_rom of rom is
     constant conteudo_rom : mem := (
         -- caso endereco => conteudo //nossos registradores são iniciados com zero
         
-        0   => B"00000_010010_11111", -- addi R0,zero,31
-        1   => B"00000_111011_00100", -- sth R0,R4
-        2   => B"00001_010010_11111", -- addi R1,zero,31
-        3   => B"00010_111001_00100", -- ldh R0,R4
-        4   => B"00011_010010_11111", -- addi R3,zero,31
+        0   => B"00100_010010_00110", -- addi R4,zero,6
+        1   => B"00000_010010_11111", -- addi R0,zero,31
+        2   => B"00000_111011_00100", -- sth R0,R4
+        3   => B"00001_010010_11111", -- addi R1,zero,31
+        4   => B"00010_111001_00100", -- ldh R0,R4
+        5   => B"00011_010010_11111", -- addi R3,zero,31
 
 
 

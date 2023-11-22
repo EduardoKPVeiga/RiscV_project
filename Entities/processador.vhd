@@ -240,7 +240,7 @@ begin
     -- RAM
     wr_en_ram_s <=  '1' when    op_code_s = sth_op_code_const   else
                     '0';
-    address_ram_s   <= "00" & instruction_from_rom_s(4 downto 0)    when   ( op_code_s = sth_op_code_const   or  op_code_s = ldh_op_code_const) and (state_s = "01");
+    address_ram_s   <=  register1_data_bdr_s(6 downto 0)    when   ( op_code_s = sth_op_code_const   or  op_code_s = ldh_op_code_const) and (state_s = "01");
     data_in_ram_s   <=  register2_data_bdr_s   when  ( op_code_s = sth_op_code_const   or  op_code_s = ldh_op_code_const) and (register2_data_bdr_s /= "0000000000000000" ); -- mudar aqui 
 
     clk_proc_s      <=  clk_proc;
