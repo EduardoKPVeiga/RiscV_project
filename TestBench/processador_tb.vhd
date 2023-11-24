@@ -50,7 +50,7 @@ begin
     begin
         wait for period_time;
         rst_s <= '0';
-        wait for 2500 * period_time;
+        wait for 2600 * period_time;
         finished <= '1';
         wait;
     end process;
