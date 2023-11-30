@@ -29,11 +29,10 @@ architecture a_processador of processador is
     constant bch_op_code_const  : unsigned(5 downto 0)  := "101100";
     constant jmp_op_code_const  : unsigned(5 downto 0)  := "000011";
     constant cmp_op_code_const  : unsigned(5 downto 0)  := "000111";
-    -- constant mov_op_code_const  : unsigned(5 downto 0)  := "000000";
     constant mov_op_code_const  : unsigned(5 downto 0)  := "000000";
     constant ldh_op_code_const  : unsigned(5 downto 0)  := "111001";
     constant sth_op_code_const  : unsigned(5 downto 0)  := "111011";
-    -- constant nop_op_code_const  : unsigned(5 downto 0)  := "000000";
+    constant nop_op_code_const  : unsigned(5 downto 0)  := "000000";
 
     component top_level_uc
         port (
@@ -176,14 +175,15 @@ begin
     );
 
     -- Decode message
-    op_code_s     <=    add_op_code_const   when    ((instruction_from_rom_s(10 downto 5) = add_op_code_const))     and state_s = "01"  else
-                        addi_op_code_const  when    ((instruction_from_rom_s(10 downto 5) = addi_op_code_const))    and state_s = "01"  else
-                        sub_op_code_const   when    ((instruction_from_rom_s(10 downto 5) = sub_op_code_const))     and state_s = "01"  else
+    op_code_s     <=    add_op_code_const   when    ((instruction_from_rom_s(10 downto 5) = add_op_code_const))             and state_s = "01"  else
+                        addi_op_code_const  when    ((instruction_from_rom_s(10 downto 5) = addi_op_code_const))            and state_s = "01"  else
+                        sub_op_code_const   when    ((instruction_from_rom_s(10 downto 5) = sub_op_code_const))             and state_s = "01"  else
                         bch_op_code_const   when    (((instruction_from_rom_s(10 downto 7) & "00") = bch_op_code_const))    and state_s = "01"  else
                         jmp_op_code_const   when    ((instruction_from_rom_s(10 downto 5) = jmp_op_code_const))             and state_s = "01"  else
                         cmp_op_code_const   when    ((instruction_from_rom_s(10 downto 5) = cmp_op_code_const))             and state_s = "01"  else
-                        ldh_op_code_const   when    ((instruction_from_rom_s(10 downto 5) = ldh_op_code_const))     and state_s = "01"  else
-                        sth_op_code_const   when    ((instruction_from_rom_s(10 downto 5) = sth_op_code_const))     and state_s = "01";
+                        ldh_op_code_const   when    ((instruction_from_rom_s(10 downto 5) = ldh_op_code_const))             and state_s = "01"  else
+                        nop_op_code_const   when    ((instruction_from_rom_s(10 downto 5) = nop_op_code_const))             and state_s = "01"  else
+                        sth_op_code_const   when    ((instruction_from_rom_s(10 downto 5) = sth_op_code_const))             and state_s = "01";
 
                         
     register1_bdr_s   <=    (reg_concatenation & instruction_from_rom_s(4 downto 0))    when    (op_code_s = add_op_code_const) and (state_s = "01")  else
@@ -205,7 +205,7 @@ begin
                             
     value_bdr_s <=  (value_concatenation & instruction_from_rom_s(4 downto 0))  when    (op_code_s = addi_op_code_const)    else
                     register2_data_bdr_s    when    op_code_s = bch_op_code_const   else
-                    data_out_ram_s          when    op_code_s = ldh_op_code_const   else
+                   data_out_ram_s          when    op_code_s = ldh_op_code_const   else
                     register2_data_bdr_s    when    op_code_s = sth_op_code_const   else
                     result_ula_s;
 
@@ -234,14 +234,14 @@ begin
                             "0000000000000000";
 -- +1
 
-    write_reg_bdr_s <=  register2_bdr_s when    state_s = "01"  else
+    write_reg_bdr_s <=  register2_bdr_s when   ( state_s = "01") and (op_code_s /= cmp_op_code_const)  else
                         invalid_register;
 
     -- RAM
     wr_en_ram_s <=  '1' when    op_code_s = sth_op_code_const   else
                     '0';
-    address_ram_s   <=  register1_data_bdr_s(6 downto 0)    when   ( op_code_s = sth_op_code_const   or  op_code_s = ldh_op_code_const) and (state_s = "01");
-    data_in_ram_s   <=  register2_data_bdr_s   when  ( op_code_s = sth_op_code_const   or  op_code_s = ldh_op_code_const) and (register2_data_bdr_s /= "0000000000000000" ); -- mudar aqui 
+    address_ram_s   <= register1_data_bdr_s(6 downto 0)    when   ( op_code_s = sth_op_code_const   or  op_code_s = ldh_op_code_const) and (state_s = "01");
+    data_in_ram_s   <= register2_data_bdr_s                when   ( op_code_s = sth_op_code_const   or  op_code_s = ldh_op_code_const) and (state_s = "01"); -- mudar aqui 
 
     clk_proc_s      <=  clk_proc;
     rst_proc_s      <=  rst_proc;
