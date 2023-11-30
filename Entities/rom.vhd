@@ -53,7 +53,7 @@ architecture a_rom of rom is
 ------------------ Coloca 0 nos multiplos do nro primo
         24   => B"00011_000111_00110", -- cmp R3,R6
         25   => B"11110_1011_100_0100", -- bne -12  11110 100
------------------- Ve se o nro primo é igual 7, se for acaba, se não continua no loop
+------------------ Ve se o nro primo é maior 7, se for acaba, se não continua no loop
 ------------------ É basicamente um if(nro_primo > 7) sai 
         26   => B"00001_010010_00010", -- addi R1,zero,2
         27   => B"00010_010010_00001", -- addi R2,zero,1
